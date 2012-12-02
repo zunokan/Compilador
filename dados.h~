@@ -16,6 +16,14 @@ struct Variavel {
 	
 }
 
+struct Tipo* clonar_tipo(struct Tipo* t){
+	if (t == NULL)
+		return NULL;	
+	struct Tipo* tmp = malloc(sizeof(struct Tipo));
+	tmp->id = t->id;
+	tmp->filho = clonar_tipo(t->filho);	
+}
+
 struct Variavel* criar_variavel(char* name, struct Tipo* t){
 	struct Variavel* tmp = malloc(sizeof(struct Variavel));
 	tmp->nome = malloc(sizeof(char * (strlen(name) + 1)));
@@ -23,6 +31,8 @@ struct Variavel* criar_variavel(char* name, struct Tipo* t){
 	tmp->tipo = clonar_tipo(t);
 	return tmp;	
 }
+
+
 
 int iguais( struct Tipo *t1, struct Tipo *t2){
 	if (t1->id != t2->id)
