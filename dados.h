@@ -165,3 +165,4 @@ void gerar_codigo(ASTNode* ptr) {
             break;
     }
 }
+

@@ -9,6 +9,10 @@ void yyerror(char* s);
 extern void msgErro();
 %}
 
+%union {
+    ASTNode* ptr;
+};
+
 %token CHAR
 %token FIM
 %token ERRO
@@ -66,7 +70,7 @@ programa_completo
     ;
 
 tipo
-    : TIPO_BOOLEANO
+    : TIPO_BOOLEANO { $$.ptr = create_node(AST_TIPO_BOOLEANO, NULL, NULL,NULL); }
     | TIPO_FLOAT
     | TIPO_CHAR
     | TIPO_STRING
