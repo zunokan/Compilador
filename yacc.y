@@ -125,9 +125,9 @@ comandos
     | tipo ID '['  INTEIRO ']' ';'
     | tipo ID '['  INTEIRO ']' '=' '{' lista_inicializacao_vetor '}' ';'
     | expressao ';'
-    | ENQUANTO '(' expressao ')' comandos
-    | FACA comandos ENQUANTO '(' expressao ')' ';'
-    | PARA CADA ID EM conjunto comandos
+    | ENQUANTO '(' expressao ')' comandos { $$ = no_enquanto($3, $5); }
+    | FACA comandos ENQUANTO '(' expressao ')' ';' { $$ = no_faca_enquanto($2, $5); }
+    | PARA CADA ID EM conjunto comandos { $$ = no_para(
     | SE '(' expressao ')' comandos %prec IFX
     | SE '(' expressao ')' comandos SENAO comandos
     | '{' lista_de_comandos '}'
@@ -225,7 +225,9 @@ expressao_de_cast
 
 expressao_unaria
     : expressao_posfixa
-    | operadores_unarios expressao_de_cast
+    | '+' expressao_de_cast
+    | '-' expressao_de_cast
+    | '!' expressao_de_cast
     ;
 
 expressao_posfixa
@@ -262,11 +264,6 @@ operador_atribuicao
     : '='
     ;
 
-operadores_unarios
-    : '+'
-    | '-'
-    | '!'
-    ;
 
 %%
 

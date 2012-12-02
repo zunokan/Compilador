@@ -6,10 +6,10 @@
 #include <stdarg.h>
 #include <string.h>
 
-enum Etipo { 
-    T_INTEIRO, T_FLUTUANTE, T_BOOLEANO, T_CARACTERE, T_STRING, 
-    T_VETOR, T_REFERENCIA
-};
+/***********************************************/
+/* Parte referente a arvore sintatica abstrata */
+/***********************************************/
+
 
 enum CTipo {
     /* declaracao da main, funcoes e procedimentos */
@@ -62,58 +62,106 @@ enum CTipo {
     AST_TIPO_INTEIRO
 };
 
+struct ASTNode{
+    struct Tipo* tipo;
+    char* valor;
+    struct ASTNode* filho1;
+    struct ASTNode* filho2;
+    struct ASTNode* filho3;
+    enum CTipo ctipo;
+};
+
+struct ASTNode* no_tipo(enum CTipo ctipo) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = ctipo;
+    return tmp;
+}
+
+struct ASTNode* no_programa(struct ASTNode* ptr1, struct ASTNode* ptr2) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_DECL_MAIN;
+    tmp->filho1 = ptr1;
+    tmp->filho2 = ptr2;
+    return tmp;
+}
+
+void liberar(struct ASTNode* ptr) {
+    /* TODO */
+}
+
+/****************************************/
+/* Parte referente a tabela de simbolos */
+/****************************************/
+enum Etipo { 
+    T_INTEIRO, T_FLUTUANTE, T_BOOLEANO, T_CARACTERE, T_STRING, 
+    T_VETOR, T_REFERENCIA
+};
+
 struct Tipo{
-	enum Etipo id;
-	struct Tipo *filho;
+    enum Etipo id;
+    struct Tipo *filho;
+};
+
+struct Constante {
+    char* valor;
+    struct Tipo* tipo;
 };
 
 struct Variavel {
-	char* nome;
-	struct Tipo* tipo;
+    char* nome;
+    struct Tipo* tipo;
+    struct Funcao* escopo;
 };
-
-struct ASTNode{
-	struct Tipo* tipo;
-	char* valor;
-	struct ASTNode* filho1;
-	struct ASTNode* filho2;
-	struct ASTNode* filho3;
-	enum CTipo ctipo;
-};
-
 
 struct Funcao {
-	char* nome;	
-	int numero_parametros;
-	int* parametros;
-	struct Tipo* retorno;
-	struct ASTNode* corpo;
+    char* nome;    
+    int numero_parametros;
+    struct Variavel* parametros;
+    struct Tipo* retorno;
 };
 
+struct Procedimento {
+    char* nome;    
+    int numero_parametros;
+    struct Variavel* parametros;
+    struct Tipo* retorno;
+};
+
+struct TabelaSimbolos {
+    int num_cons;
+    int num_vars;
+    int num_funs;
+    int num_procs;
+
+    struct Constante* cons;
+    struct Variavel* vars;
+    struct Funcao* funs;
+    struct Procedimento* procs;
+};
+
+
 struct Tipo* clonar_tipo(struct Tipo* t){
-	if (t == NULL)
-		return NULL;	
-	struct Tipo* tmp = malloc(sizeof(struct Tipo));
-	tmp->id = t->id;
-	tmp->filho = clonar_tipo(t->filho);	
+    if (t == NULL)
+        return NULL;    
+    struct Tipo* tmp = malloc(sizeof(struct Tipo));
+    tmp->id = t->id;
+    tmp->filho = clonar_tipo(t->filho);    
 };
 
 struct Variavel* criar_variavel(char* name, struct Tipo* t){
-	struct Variavel* tmp = malloc(sizeof(struct Variavel));
-	tmp->nome = malloc(sizeof(char) * (strlen(name) + 1));
-	strcpy(tmp->nome, name);
-	tmp->tipo = clonar_tipo(t);
-	return tmp;	
+    struct Variavel* tmp = malloc(sizeof(struct Variavel));
+    tmp->nome = malloc(sizeof(char) * (strlen(name) + 1));
+    strcpy(tmp->nome, name);
+    tmp->tipo = clonar_tipo(t);
+    return tmp;    
 };
 
-
-
 int iguais( struct Tipo *t1, struct Tipo *t2){
-	if (t1->id != t2->id) {
-		return 0;
+    if (t1->id != t2->id) {
+        return 0;
     } else if (t1-> id == T_VETOR || t1->id == T_REFERENCIA) {
-		return iguais(t1->filho, t2->filho);
-	} else {
+        return iguais(t1->filho, t2->filho);
+    } else {
         return 1;
     }
 }
@@ -135,24 +183,6 @@ void dobrar_variavel(struct Variavel** ptr, int* tam) {
     free(*ptr);
     *ptr = tmp;
     *tam = novo_t;
-}
-
-struct ASTNode* no_tipo(enum CTipo ctipo) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = ctipo;
-    return tmp;
-}
-
-struct ASTNode* no_programa(struct ASTNode* ptr1, struct ASTNode* ptr2) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_DECL_MAIN;
-    tmp->filho1 = ptr1;
-    tmp->filho2 = ptr2;
-    return tmp;
-}
-
-void liberar(struct ASTNode* ptr) {
-    /* TODO */
 }
 
 /***************************************/
@@ -181,9 +211,11 @@ void gerar_codigo(struct ASTNode* ptr) {
         case AST_LITERAL:
             printf("%s", ptr->valor);
             break;
+
         case AST_ID:
             printf("%s", ptr->valor);
             break;
+
         case AST_WHILE:
             printf("L%i:\n", lbl1 = lbl++);
             printf("if (!(");
@@ -192,93 +224,107 @@ void gerar_codigo(struct ASTNode* ptr) {
             gerar_codigo(ptr->filho2);
             printf("goto L%i;\n", lbl1);
             break;
-		case AST_SOMA:	//alterações 02/12
-			gerar_codigo(ptr->filho1);
-			printf("+");
-			gerar_codigo(ptr->filho2);			
-			break;
-		case AST_SUBTRACAO:	//alterações 02/12
-			gerar_codigo(ptr->filho1);
-			printf("-");
-			gerar_codigo(ptr->filho2);			
-			break;		
-		case AST_MULTIPLICACAO:	//alterações 02/12
-			gerar_codigo(ptr->filho1);
-			printf("*");
-			gerar_codigo(ptr->filho2);			
-			break;		
-		case AST_DIFERENCA:	//alterações 02/12
-			gerar_codigo(ptr->filho1);
-			printf("/");
-			gerar_codigo(ptr->filho2);			
-			break;
-		case AST_MENOR:	//alterações 02/12
-			gerar_codigo(ptr->filho1);
-			printf("<");
-			gerar_codigo(ptr->filho2);			
-			break;
-		case AST_MENOR_IGUAL:	//alterações 02/12
-			gerar_codigo(ptr->filho1);
-			printf("<=");
-			gerar_codigo(ptr->filho2);			
-			break;
-		case AST_MAIOR:	//alterações 02/12
-			gerar_codigo(ptr->filho1);
-			printf(">");
-			gerar_codigo(ptr->filho2);			
-			break;
-		case AST_MAIOR_IGUAL:	//alterações 02/12
-			gerar_codigo(ptr->filho1);
-			printf(">=");
-			gerar_codigo(ptr->filho2);			
-			break;		
-		case AST_MOD:	//alterações 02/12
-			gerar_codigo(ptr->filho1);
-			printf("%c", '%');
-			gerar_codigo(ptr->filho2);			
-			break;
-		case AST_IMPLICA:	//alterações 02/12
-			printf("((!");			
-			gerar_codigo(ptr->filho1);
-			printf(" &&	!");
-			gerar_codigo(ptr->filho2);
-			printf(") || (!");
-			gerar_codigo(ptr->filho1);
-			printf(" && ");
-			gerar_codigo(ptr->filho2);
-			printf(") || (");
-			gerar_codigo(ptr->filho1);
-			printf(" && ");
-			gerar_codigo(ptr->filho2);
-			printf("))");			
-			break;
-		case AST_BIIMPLICA:	//alterações 02/12
-			printf("((!");			
-			gerar_codigo(ptr->filho1);
-			printf(" && !");
-			gerar_codigo(ptr->filho2);
-			printf(") || (");
-			gerar_codigo(ptr->filho1);
-			printf(" && ");
-			gerar_codigo(ptr->filho2);
-			printf("))");			
-			break;
-		case AST_DISJUNCAO:	//alterações 02/12
-			gerar_codigo(ptr->filho1);
-			printf("||");
-			gerar_codigo(ptr->filho2);			
-			break;
-		case AST_CONJUNCAO:	//alterações 02/12
-			gerar_codigo(ptr->filho1);
-			printf("&&");
-			gerar_codigo(ptr->filho2);			
-			break;
-		case AST_VETOR:							//tem que conferir isso aqui ainda...
-			printf("%s[", ptr->valor);
-			gerar_codigo(ptr->filho1);
-			printf("] = ");
-			gerar_codigo(ptr->filho2);
-			
+
+        case AST_SOMA:    //alterações 02/12
+            gerar_codigo(ptr->filho1);
+            printf("+");
+            gerar_codigo(ptr->filho2);            
+            break;
+
+        case AST_SUBTRACAO:    //alterações 02/12
+            gerar_codigo(ptr->filho1);
+            printf("-");
+            gerar_codigo(ptr->filho2);            
+            break;
+
+        case AST_MULTIPLICACAO:    //alterações 02/12
+            gerar_codigo(ptr->filho1);
+            printf("*");
+            gerar_codigo(ptr->filho2);            
+            break;        
+
+        case AST_DIFERENCA:    //alterações 02/12
+            gerar_codigo(ptr->filho1);
+            printf("/");
+            gerar_codigo(ptr->filho2);            
+            break;
+
+        case AST_MENOR:    //alterações 02/12
+            gerar_codigo(ptr->filho1);
+            printf("<");
+            gerar_codigo(ptr->filho2);            
+            break;
+
+        case AST_MENOR_IGUAL:    //alterações 02/12
+            gerar_codigo(ptr->filho1);
+            printf("<=");
+            gerar_codigo(ptr->filho2);            
+            break;
+
+        case AST_MAIOR:    //alterações 02/12
+            gerar_codigo(ptr->filho1);
+            printf(">");
+            gerar_codigo(ptr->filho2);            
+            break;
+
+        case AST_MAIOR_IGUAL:    //alterações 02/12
+            gerar_codigo(ptr->filho1);
+            printf(">=");
+            gerar_codigo(ptr->filho2);            
+            break;        
+
+        case AST_MOD:    //alterações 02/12
+            gerar_codigo(ptr->filho1);
+            printf("%c", '%');
+            gerar_codigo(ptr->filho2);            
+            break;
+
+        case AST_IMPLICA:    //alterações 02/12
+            printf("((!");            
+            gerar_codigo(ptr->filho1);
+            printf(" &&    !");
+            gerar_codigo(ptr->filho2);
+            printf(") || (!");
+            gerar_codigo(ptr->filho1);
+            printf(" && ");
+            gerar_codigo(ptr->filho2);
+            printf(") || (");
+            gerar_codigo(ptr->filho1);
+            printf(" && ");
+            gerar_codigo(ptr->filho2);
+            printf("))");            
+            break;
+
+        case AST_BIIMPLICA:    //alterações 02/12
+            printf("((!");            
+            gerar_codigo(ptr->filho1);
+            printf(" && !");
+            gerar_codigo(ptr->filho2);
+            printf(") || (");
+            gerar_codigo(ptr->filho1);
+            printf(" && ");
+            gerar_codigo(ptr->filho2);
+            printf("))");            
+            break;
+
+        case AST_DISJUNCAO:    //alterações 02/12
+            gerar_codigo(ptr->filho1);
+            printf("||");
+            gerar_codigo(ptr->filho2);            
+            break;
+
+        case AST_CONJUNCAO:    //alterações 02/12
+            gerar_codigo(ptr->filho1);
+            printf("&&");
+            gerar_codigo(ptr->filho2);            
+            break;
+
+        case AST_VETOR:    //tem que conferir isso aqui ainda...
+            printf("%s[", ptr->valor);
+            gerar_codigo(ptr->filho1);
+            printf("] = ");
+            gerar_codigo(ptr->filho2);
+            
         default:
             printf("ERRO!\n");
             break;
