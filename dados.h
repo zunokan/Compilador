@@ -16,6 +16,16 @@ struct Variavel {
 	
 }
 
+struct ASTNode{
+	struct Tipo* tipo;
+	struct ASTNode* filho1;
+	struct ASTNode* filho2;
+	struct ASTNode* filho3;
+	enum CTipo* ctipo;
+}
+
+enum CTipo { SOMA, DIFERENÇA, WHILE, IF, ESCREVA, LEIA, MOD, IMPLICA, BIIMPLICA, DISJUNCAO, CONJUNCAO, DO_WHILE};
+
 struct Funcao {
 	char* nome;	
 	int numero_parametros;
