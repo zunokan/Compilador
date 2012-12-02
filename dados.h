@@ -16,11 +16,12 @@ struct Variavel {
 	
 }
 
-struct Variavel* criar_variavel(char* name, enum Etipo t){
+struct Variavel* criar_variavel(char* name, struct Tipo* t){
 	struct Variavel* tmp = malloc(sizeof(struct Variavel));
-	tmp->nome = name;
-	tmp->tipo->id = t;
-	tmp->tipo->filho = NULL;
+	tmp->nome = malloc(sizeof(char * strlen(name)));
+	strcpy(tmp->nome, name);
+	tmp->nome = malloc(sizeof(char * (strlen(name) + 1)));
+	tmp->tipo = t;
 	return tmp;	
 }
 

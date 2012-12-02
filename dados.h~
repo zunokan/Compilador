@@ -20,7 +20,8 @@ struct Variavel* criar_variavel(char* name, enum Etipo t){
 	struct Variavel* tmp = malloc(sizeof(struct Variavel));
 	tmp->nome = name;
 	tmp->tipo->id = t;
-	tmp->tipo->filho = NULL;	
+	tmp->tipo->filho = NULL;
+	return tmp;	
 }
 
 int iguais( struct Tipo *t1, struct Tipo *t2){
