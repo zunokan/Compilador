@@ -3,6 +3,7 @@
 #include <stdarg.h>
 
 enum Etipo { INTEIRO, FLUTUANTE, BOOLEANO, CARACTERE, STRING, VETOR, REFERENCIA};
+enum CTipo { SOMA, DIFERENÇA, WHILE, IF, ESCREVA, LEIA, MOD, IMPLICA, BIIMPLICA, DISJUNCAO, CONJUNCAO, DO_WHILE};
 
 struct Tipo{
 	enum Etipo id;
@@ -21,10 +22,9 @@ struct ASTNode{
 	struct ASTNode* filho1;
 	struct ASTNode* filho2;
 	struct ASTNode* filho3;
-	enum CTipo* ctipo;
+	enum CTipo ctipo;
 }
 
-enum CTipo { SOMA, DIFERENÇA, WHILE, IF, ESCREVA, LEIA, MOD, IMPLICA, BIIMPLICA, DISJUNCAO, CONJUNCAO, DO_WHILE};
 
 struct Funcao {
 	char* nome;	
@@ -93,7 +93,7 @@ void dobrar_variavel(struct Variavel** ptr, int* tam) {
 /* Parte reference a geracao de codigo */
 /***************************************/
 
-int label = 0;
+static int lbl= 0;
 
 void gerar_codigo(ASTNode* ptr) {
     int lbl1;
@@ -103,7 +103,23 @@ void gerar_codigo(ASTNode* ptr) {
         return;
     }
     
-    switch (p->type) {
-
+    switch (ptr->ctipo) {
+        case AST_LITERAL:
+            printf("%s", ptr->valor);
+            break;
+        case AST_ID:
+            printf("%s", ptr->valor);
+            break;
+        case AST_WHILE:
+            printf("L%i:\n", lbl1 = lbl++);
+            printf("if (!(");
+            gerar_codigo(ptr->filho1);
+            printf(") goto L%i;\n", lbl2 = lbl++);
+            gerar_codigo(ptr->filho2);
+            printf("goto L%i;\n", lbl1);
+            break;
+        default:
+            printf("ERRO!\n");
+            break;
     }
 }
