@@ -105,6 +105,8 @@ comandos
     : ';'
     | tipo ID ';'
     | tipo ID '=' expressao ';'
+    | tipo ID '['  INTEIRO ']' ';'
+    | tipo ID '['  INTEIRO ']' '=' '{' lista_inicializacao_vetor '}' ';'
     | expressao ';'
     | ENQUANTO '(' expressao ')' comandos
     | FACA comandos ENQUANTO '(' expressao ')' ';'
@@ -117,7 +119,11 @@ comandos
     | RETORNE expressao ';'
     ;
 
-
+lista_inicializacao_vetor
+    : literal
+    | lista_inicializacao_vetor ',' literal
+    ;
+    
 conjunto
     : ID
     | '{' literal_conjunto '}'
