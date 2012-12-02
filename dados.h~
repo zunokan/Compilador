@@ -135,14 +135,30 @@ void gerar_codigo(ASTNode* ptr) {
 			gerar_codigo(ptr->filho2);			
 			break;
 		case AST_IMPLICA:	//alterações 02/12
+			printf("((!");			
 			gerar_codigo(ptr->filho1);
-			printf("->");
-			gerar_codigo(ptr->filho2);			
+			printf(" &&	!");
+			gerar_codigo(ptr->filho2);
+			printf(") || (!");
+			gerar_codigo(ptr->filho1);
+			printf(" && ");
+			gerar_codigo(ptr->filho2);
+			printf(") || (");
+			gerar_codigo(ptr->filho1);
+			printf(" && ");
+			gerar_codigo(ptr->filho2);
+			printf("))");			
 			break;
 		case AST_BIIMPLICA:	//alterações 02/12
+			printf("((!");			
 			gerar_codigo(ptr->filho1);
-			printf("<->");
-			gerar_codigo(ptr->filho2);			
+			printf(" && !");
+			gerar_codigo(ptr->filho2);
+			printf(") || (");
+			gerar_codigo(ptr->filho1);
+			printf(" && ");
+			gerar_codigo(ptr->filho2);
+			printf("))");			
 			break;
 		case AST_DISJUNCAO:	//alterações 02/12
 			gerar_codigo(ptr->filho1);
@@ -151,17 +167,15 @@ void gerar_codigo(ASTNode* ptr) {
 			break;
 		case AST_CONJUNCAO:	//alterações 02/12
 			gerar_codigo(ptr->filho1);
-			printf("+");
+			printf("&&");
 			gerar_codigo(ptr->filho2);			
 			break;
-		case AST_DO_WHILE:
-            printf("L%i:\n", lbl1 = lbl++);
-            printf("if (!(");
-            gerar_codigo(ptr->filho1);
-            printf(") goto L%i;\n", lbl2 = lbl++);
-            gerar_codigo(ptr->filho2);
-            printf("goto L%i;\n", lbl1);
-            break;
+		case AST_VETOR:							//tem que conferir isso aqui ainda...
+			printf("%s[", ptr->valor);
+			gerar_codigo(ptr->filho1);
+			printf("] = ");
+			gerar_codigo(ptr->filho2);
+			
         default:
             printf("ERRO!\n");
             break;

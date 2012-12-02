@@ -3,7 +3,7 @@
 #include <stdarg.h>
 
 enum Etipo { INTEIRO, FLUTUANTE, BOOLEANO, CARACTERE, STRING, VETOR, REFERENCIA};
-enum CTipo { AST_ID, AST_SOMA, AST_DIFERENCA, AST_WHILE, AST_IF, ESCREVA, LEIA, AST_MOD, AST_IMPLICA, AST_BIIMPLICA, AST_DISJUNCAO, AST_CONJUNCAO, AST_DO_WHILE, AST_LITERAL};
+enum CTipo { AST_ID, AST_SOMA, AST_SUBTRACAO, AST_MULTIPLICACAO, AST_DIFERENCA, AST_WHILE, AST_IF, ESCREVA, LEIA, AST_MOD, AST_IMPLICA, AST_BIIMPLICA, AST_DISJUNCAO, AST_CONJUNCAO, AST_DO_WHILE, AST_LITERAL};
 
 struct Tipo{
 	enum Etipo id;
@@ -124,6 +124,16 @@ void gerar_codigo(ASTNode* ptr) {
 			printf("+");
 			gerar_codigo(ptr->filho2);			
 			break;
+		case AST_SUBTRACAO:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf("-");
+			gerar_codigo(ptr->filho2);			
+			break;		
+		case AST_MULTIPLICACAO:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf("*");
+			gerar_codigo(ptr->filho2);			
+			break;		
 		case AST_DIFERENCA:	//alterações 02/12
 			gerar_codigo(ptr->filho1);
 			printf("/");
@@ -135,14 +145,30 @@ void gerar_codigo(ASTNode* ptr) {
 			gerar_codigo(ptr->filho2);			
 			break;
 		case AST_IMPLICA:	//alterações 02/12
+			printf("((!");			
 			gerar_codigo(ptr->filho1);
-			printf("->");
-			gerar_codigo(ptr->filho2);			
+			printf(" &&	!");
+			gerar_codigo(ptr->filho2);
+			printf(") || (!");
+			gerar_codigo(ptr->filho1);
+			printf(" && ");
+			gerar_codigo(ptr->filho2);
+			printf(") || (");
+			gerar_codigo(ptr->filho1);
+			printf(" && ");
+			gerar_codigo(ptr->filho2);
+			printf("))");			
 			break;
 		case AST_BIIMPLICA:	//alterações 02/12
+			printf("((!");			
 			gerar_codigo(ptr->filho1);
-			printf("<->");
-			gerar_codigo(ptr->filho2);			
+			printf(" && !");
+			gerar_codigo(ptr->filho2);
+			printf(") || (");
+			gerar_codigo(ptr->filho1);
+			printf(" && ");
+			gerar_codigo(ptr->filho2);
+			printf("))");			
 			break;
 		case AST_DISJUNCAO:	//alterações 02/12
 			gerar_codigo(ptr->filho1);
@@ -151,7 +177,7 @@ void gerar_codigo(ASTNode* ptr) {
 			break;
 		case AST_CONJUNCAO:	//alterações 02/12
 			gerar_codigo(ptr->filho1);
-			printf("+");
+			printf("&&");
 			gerar_codigo(ptr->filho2);			
 			break;
 		case AST_VETOR:							//tem que conferir isso aqui ainda...
