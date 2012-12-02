@@ -78,3 +78,22 @@ void dobrar_variavel(struct Variavel** ptr, int* tam) {
     *ptr = tmp;
     *tam = novo_t;
 }
+
+/***************************************/
+/* Parte reference a geracao de codigo */
+/***************************************/
+
+int label = 0;
+
+void gerar_codigo(ASTNode* ptr) {
+    int lbl1;
+    int lbl2;
+
+    if (ptr == NULL) {
+        return;
+    }
+    
+    switch (p->type) {
+
+    }
+}
