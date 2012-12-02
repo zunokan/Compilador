@@ -5,7 +5,7 @@ inteiro soma_3 ( inteiro x, inteiro y, inteiro z){
 
 procedimento imprime (caractere y){
         caractere texto =  y;
-		//escreva(y);
+		escreva(y);
 }
 
 inteiro faixa (flutuante b){
@@ -27,7 +27,7 @@ programa {
 	caractere c = 'Z';
 	imprime(c);
     enquanto (flag < 10) {
-		//escreva(x);
+		escreva(x);
 		faixa = faixa + ((2*2) - 1);
         flag = flag + 1;
     }

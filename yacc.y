@@ -112,6 +112,8 @@ comandos
     | SE '(' expressao ')' comandos %prec IFX
     | SE '(' expressao ')' comandos SENAO comandos
     | '{' lista_de_comandos '}'
+    | ESCREVA '(' expressao ')' ';'
+    | LEIA '(' ID  ')' ';'
     | RETORNE expressao ';'
     ;
 
