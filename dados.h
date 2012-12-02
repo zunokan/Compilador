@@ -18,6 +18,7 @@ struct Variavel {
 
 struct ASTNode{
 	struct Tipo* tipo;
+	char* valor;
 	struct ASTNode* filho1;
 	struct ASTNode* filho2;
 	struct ASTNode* filho3;
