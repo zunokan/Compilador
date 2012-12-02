@@ -211,6 +211,14 @@ expressao_primaria
     : literal
     | ID
     | '(' expressao ')'
+    | ID '(' lista_expressoes ')'
+    | ID '(' ')'
+    | 
+    ;
+
+lista_expressoes:
+    : expressao
+    | lista_expressoes ',' expressao
     ;
 
 literal
