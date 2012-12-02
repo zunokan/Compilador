@@ -3,6 +3,7 @@
 #include <stdarg.h>
 
 enum Etipo { INTEIRO, FLUTUANTE, BOOLEANO, CARACTERE, STRING, VETOR, REFERENCIA};
+enum CTipo { AST_ID, AST_SOMA, AST_DIFERENCA, AST_WHILE, AST_IF, ESCREVA, LEIA, AST_MOD, AST_IMPLICA, AST_BIIMPLICA, AST_DISJUNCAO, AST_CONJUNCAO, AST_DO_WHILE, AST_LITERAL};
 
 struct Tipo{
 	enum Etipo id;
@@ -18,13 +19,13 @@ struct Variavel {
 
 struct ASTNode{
 	struct Tipo* tipo;
+	char* valor;
 	struct ASTNode* filho1;
 	struct ASTNode* filho2;
 	struct ASTNode* filho3;
-	enum CTipo* ctipo;
+	enum CTipo ctipo;
 }
 
-enum CTipo { SOMA, DIFERENÇA, WHILE, IF, ESCREVA, LEIA, MOD, IMPLICA, BIIMPLICA, DISJUNCAO, CONJUNCAO, DO_WHILE};
 
 struct Funcao {
 	char* nome;	
@@ -87,4 +88,82 @@ void dobrar_variavel(struct Variavel** ptr, int* tam) {
     free(*ptr);
     *ptr = tmp;
     *tam = novo_t;
+}
+
+/***************************************/
+/* Parte referente a geracao de codigo */
+/***************************************/
+
+static int lbl= 0;
+
+void gerar_codigo(ASTNode* ptr) {
+    int lbl1;
+    int lbl2;
+
+    if (ptr == NULL) {
+        return;
+    }
+    
+    switch (ptr->ctipo) {
+        case AST_LITERAL:
+            printf("%s", ptr->valor);
+            break;
+        case AST_ID:
+            printf("%s", ptr->valor);
+            break;
+        case AST_WHILE:
+            printf("L%i:\n", lbl1 = lbl++);
+            printf("if (!(");
+            gerar_codigo(ptr->filho1);
+            printf(") goto L%i;\n", lbl2 = lbl++);
+            gerar_codigo(ptr->filho2);
+            printf("goto L%i;\n", lbl1);
+            break;
+		case AST_SOMA:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf("+");
+			gerar_codigo(ptr->filho2);			
+			break;
+		case AST_DIFERENCA:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf("/");
+			gerar_codigo(ptr->filho2);			
+			break;
+		case AST_MOD:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf("%");
+			gerar_codigo(ptr->filho2);			
+			break;
+		case AST_IMPLICA:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf("->");
+			gerar_codigo(ptr->filho2);			
+			break;
+		case AST_BIIMPLICA:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf("<->");
+			gerar_codigo(ptr->filho2);			
+			break;
+		case AST_DISJUNCAO:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf("||");
+			gerar_codigo(ptr->filho2);			
+			break;
+		case AST_CONJUNCAO:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf("+");
+			gerar_codigo(ptr->filho2);			
+			break;
+		case AST_DO_WHILE:
+            printf("L%i:\n", lbl1 = lbl++);
+            printf("if (!(");
+            gerar_codigo(ptr->filho1);
+            printf(") goto L%i;\n", lbl2 = lbl++);
+            gerar_codigo(ptr->filho2);
+            printf("goto L%i;\n", lbl1);
+            break;
+        default:
+            printf("ERRO!\n");
+            break;
+    }
 }

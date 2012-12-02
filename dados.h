@@ -3,7 +3,7 @@
 #include <stdarg.h>
 
 enum Etipo { INTEIRO, FLUTUANTE, BOOLEANO, CARACTERE, STRING, VETOR, REFERENCIA};
-enum CTipo { SOMA, DIFERENÇA, WHILE, IF, ESCREVA, LEIA, MOD, IMPLICA, BIIMPLICA, DISJUNCAO, CONJUNCAO, DO_WHILE};
+enum CTipo { AST_ID, AST_SOMA, AST_DIFERENCA, AST_WHILE, AST_IF, ESCREVA, LEIA, AST_MOD, AST_IMPLICA, AST_BIIMPLICA, AST_DISJUNCAO, AST_CONJUNCAO, AST_DO_WHILE, AST_LITERAL};
 
 struct Tipo{
 	enum Etipo id;
@@ -91,7 +91,7 @@ void dobrar_variavel(struct Variavel** ptr, int* tam) {
 }
 
 /***************************************/
-/* Parte reference a geracao de codigo */
+/* Parte referente a geracao de codigo */
 /***************************************/
 
 static int lbl= 0;
@@ -119,6 +119,47 @@ void gerar_codigo(ASTNode* ptr) {
             gerar_codigo(ptr->filho2);
             printf("goto L%i;\n", lbl1);
             break;
+		case AST_SOMA:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf("+");
+			gerar_codigo(ptr->filho2);			
+			break;
+		case AST_DIFERENCA:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf("/");
+			gerar_codigo(ptr->filho2);			
+			break;
+		case AST_MOD:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf("%");
+			gerar_codigo(ptr->filho2);			
+			break;
+		case AST_IMPLICA:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf("->");
+			gerar_codigo(ptr->filho2);			
+			break;
+		case AST_BIIMPLICA:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf("<->");
+			gerar_codigo(ptr->filho2);			
+			break;
+		case AST_DISJUNCAO:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf("||");
+			gerar_codigo(ptr->filho2);			
+			break;
+		case AST_CONJUNCAO:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf("+");
+			gerar_codigo(ptr->filho2);			
+			break;
+		case AST_VETOR:							//tem que conferir isso aqui ainda...
+			printf("%s[", ptr->valor);
+			gerar_codigo(ptr->filho1);
+			printf("] = ");
+			gerar_codigo(ptr->filho2);
+			
         default:
             printf("ERRO!\n");
             break;
