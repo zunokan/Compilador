@@ -3,15 +3,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include "dados.h"
 
 void yyerror(char* s);
 extern void msgErro();
 %}
 
-%token CHAR
+%union {
+    char* valor;
+    struct ASTNode* ptr;
+};
+
 %token FIM
 %token ERRO
-%token STRING
 %token GE
 %token LE
 %token IGUAL
@@ -48,33 +52,47 @@ extern void msgErro();
 %token LEIA
 %token ESCREVA
 %token SE
-%token INTEIRO
-%token FLOAT
-%token ID
+%token <valor> CHAR
+%token <valor> STRING
+%token <valor> INTEIRO
+%token <valor> FLOAT
+%token <valor> ID
 
 %nonassoc IFX
 %nonassoc SENAO
 
-%start programa_completo
+%start programa_completo 
+%type <ptr> programa_completo programa lista_declaracoes comandos
+%type <ptr> expressao
 %%
 
 
 programa_completo
-    : lista_declaracoes PROGRAMA '{' programa '}'    { printf("sucesso\n"); }
-    | PROGRAMA '{' programa '}'    { printf("sucesso\n"); }
+    : lista_declaracoes PROGRAMA '{' programa '}' 
+        { struct ASTNode* prog = no_programa($1, $4);
+          gerar_codigo(prog);
+          liberar(prog);
+          printf("sucesso\n");
+        }
+    | PROGRAMA '{' programa '}' 
+        { struct ASTNode* prog = no_programa(NULL, $3);
+          gerar_codigo(prog);
+          liberar(prog);
+          printf("sucesso\n");
+        }
     ;
 
 tipo
-    : TIPO_BOOLEANO
-    | TIPO_FLOAT
-    | TIPO_CHAR
-    | TIPO_STRING
-    | TIPO_INTEIRO
+    : TIPO_BOOLEANO 
+    | TIPO_FLOAT 
+    | TIPO_CHAR 
+    | TIPO_STRING 
+    | TIPO_INTEIRO 
     ;
 
 lista_declaracoes
-    : declaracao
-    | lista_declaracoes declaracao
+    : declaracao { $$ = NULL; }
+    | lista_declaracoes declaracao { $$ = NULL; }
     ;
 
 declaracao
@@ -92,26 +110,27 @@ declaracao_procedimento
 
 lista_argumentos
     : 
-    | tipo ID
-    | lista_argumentos ',' tipo ID
+    | tipo ID 
+    | lista_argumentos ',' tipo ID 
     ;
 
 programa
-    : 
-    | programa comandos
+    : { $$ = NULL; } 
+    | programa comandos { $$ = NULL; }
     ;
 
 
 comandos
     : ';'
-    | tipo ID ';'
+    | tipo ID ';' 
     | tipo ID '=' expressao ';'
     | tipo ID '['  INTEIRO ']' ';'
     | tipo ID '['  INTEIRO ']' '=' '{' lista_inicializacao_vetor '}' ';'
     | expressao ';'
-    | ENQUANTO '(' expressao ')' comandos
-    | FACA comandos ENQUANTO '(' expressao ')' ';'
-    | PARA CADA ID EM conjunto comandos
+    | ENQUANTO '(' expressao ')' comandos 
+        { $$ = no_enquanto($3, $5); }
+    | FACA comandos ENQUANTO '(' expressao ')' ';' 
+        { $$ = no_faca_enquanto($2, $5); }
     | SE '(' expressao ')' comandos %prec IFX
     | SE '(' expressao ')' comandos SENAO comandos
     | '{' lista_de_comandos '}'
@@ -209,7 +228,9 @@ expressao_de_cast
 
 expressao_unaria
     : expressao_posfixa
-    | operadores_unarios expressao_de_cast
+    | '+' expressao_de_cast
+    | '-' expressao_de_cast
+    | '!' expressao_de_cast
     ;
 
 expressao_posfixa
@@ -246,11 +267,6 @@ operador_atribuicao
     : '='
     ;
 
-operadores_unarios
-    : '+'
-    | '-'
-    | '!'
-    ;
 
 %%
 

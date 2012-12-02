@@ -29,26 +29,17 @@ extern void msgErro();
 %token TIPO_CHAR
 %token TIPO_STRING
 %token TIPO_INTEIRO
-%token CONJUNTO
 %token LISTA
 %token PROGRAMA
-%token EXCECAO
 %token TAD
-%token PUBLICO
-%token PRIVADO
 %token VERDADEIRO
 %token FALSO
 %token PROCEDIMENTO
-%token PARE
-%token CONTINUE
 %token RETORNE
-%token PARA
-%token CADA
 %token EM
 %token ATE
 %token ENQUANTO
 %token FACA
-%token ITERADOR
 %token LEIA
 %token ESCREVA
 %token SE
@@ -144,16 +135,6 @@ lista_inicializacao_vetor
     | lista_inicializacao_vetor ',' literal
     ;
     
-conjunto
-    : ID
-    | '{' literal_conjunto '}'
-    ;
-
-literal_conjunto
-    :
-    | literal
-    | literal_conjunto ',' literal
-    ;
 
 lista_de_comandos
     : comandos
