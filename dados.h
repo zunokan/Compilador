@@ -1,10 +1,22 @@
+#ifndef DADOS_H
+#define DADOS_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <string.h>
 
-enum Etipo { INTEIRO, FLUTUANTE, BOOLEANO, CARACTERE, STRING, VETOR, REFERENCIA};
+enum Etipo { 
+    T_INTEIRO, T_FLUTUANTE, T_BOOLEANO, T_CARACTERE, T_STRING, 
+    T_VETOR, T_REFERENCIA
+};
 
 enum CTipo {
+    /* declaracao da main, funcoes e procedimentos */
+    AST_DECL_FUN,
+    AST_DECL_PROC,
+    AST_DECL_MAIN,
+
     /* identificadores e literais */
     AST_ID,
     AST_LITERAL,
@@ -15,8 +27,8 @@ enum CTipo {
     AST_IF,
     
     /* Entrada e saida */
-    ESCREVA,
-    LEIA
+    AST_ESCREVA,
+    AST_LEIA,
  
     /* Operacoes aritmeticas*/
     AST_SOMA,
@@ -41,6 +53,8 @@ enum CTipo {
     AST_DIFERENTE,
     
     /* Tipos */
+    AST_VETOR,
+    AST_REFERENCIA,
     AST_TIPO_BOOLEANO,
     AST_TIPO_FLOAT,
     AST_TIPO_CHAR,
@@ -56,9 +70,7 @@ struct Tipo{
 struct Variavel {
 	char* nome;
 	struct Tipo* tipo;
-	
-	
-}
+};
 
 struct ASTNode{
 	struct Tipo* tipo;
@@ -67,16 +79,16 @@ struct ASTNode{
 	struct ASTNode* filho2;
 	struct ASTNode* filho3;
 	enum CTipo ctipo;
-}
+};
 
 
 struct Funcao {
 	char* nome;	
 	int numero_parametros;
 	int* parametros;
-	Tipo* retorno;
-	ASTNode* corpo;
-}
+	struct Tipo* retorno;
+	struct ASTNode* corpo;
+};
 
 struct Tipo* clonar_tipo(struct Tipo* t){
 	if (t == NULL)
@@ -84,47 +96,39 @@ struct Tipo* clonar_tipo(struct Tipo* t){
 	struct Tipo* tmp = malloc(sizeof(struct Tipo));
 	tmp->id = t->id;
 	tmp->filho = clonar_tipo(t->filho);	
-}
+};
 
 struct Variavel* criar_variavel(char* name, struct Tipo* t){
 	struct Variavel* tmp = malloc(sizeof(struct Variavel));
-	tmp->nome = malloc(sizeof(char * (strlen(name) + 1)));
+	tmp->nome = malloc(sizeof(char) * (strlen(name) + 1));
 	strcpy(tmp->nome, name);
 	tmp->tipo = clonar_tipo(t);
 	return tmp;	
-}
+};
 
 
 
 int iguais( struct Tipo *t1, struct Tipo *t2){
-	if (t1->id != t2->id)
-		return 0;	
-	if (t1->id == INTEIRO && t2->id == INTEIRO)
-		return 1;
-	if (t1->id == FLUTUANETE && t2->id == FLUTUANTE)
-		return 2;
-	if (t1->id == BOOLEANO && t2->id == BOOLEANO)
-		return 3;
-	if (t1->id == CARACTERE && t2->id == CARACTERE)
-		return 4;
-	if (t1->id == STRING && t2->id == STRING)
-		return 5;
-	if (t1->id == VETOR || t1->id == REFERENCIA){
+	if (t1->id != t2->id) {
+		return 0;
+    } else if (t1-> id == T_VETOR || t1->id == T_REFERENCIA) {
 		return iguais(t1->filho, t2->filho);
-	}
+	} else {
+        return 1;
+    }
 }
 
 void copiar_variavel(struct Variavel* dest, struct Variavel* src) {
     strcpy(dest->nome, src->nome);
-    dest = clonar_tipo(src->tipo);
+    dest->tipo = clonar_tipo(src->tipo);
 }
 
 void dobrar_variavel(struct Variavel** ptr, int* tam) {
     int i;
-    int novo_t = tam * 2;
+    int novo_t = *tam * 2;
     struct Variavel* tmp = malloc(sizeof(struct Variavel) * novo_t);
 
-    for (int i = 0; i < tam; ++i) {
+    for (i = 0; i < *tam; ++i) {
         copiar_variavel(&tmp[i], &((*ptr)[i]));
     } 
 
@@ -133,10 +137,22 @@ void dobrar_variavel(struct Variavel** ptr, int* tam) {
     *tam = novo_t;
 }
 
-ASTNode* no_tipo(enum CTipo ctipo) {
+struct ASTNode* no_tipo(enum CTipo ctipo) {
     struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
     tmp->ctipo = ctipo;
     return tmp;
+}
+
+struct ASTNode* no_programa(struct ASTNode* ptr1, struct ASTNode* ptr2) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_DECL_MAIN;
+    tmp->filho1 = ptr1;
+    tmp->filho2 = ptr2;
+    return tmp;
+}
+
+void liberar(struct ASTNode* ptr) {
+    /* TODO */
 }
 
 /***************************************/
@@ -145,7 +161,7 @@ ASTNode* no_tipo(enum CTipo ctipo) {
 
 static int lbl= 0;
 
-void gerar_codigo(ASTNode* ptr) {
+void gerar_codigo(struct ASTNode* ptr) {
     int lbl1;
     int lbl2;
 
@@ -154,6 +170,14 @@ void gerar_codigo(ASTNode* ptr) {
     }
     
     switch (ptr->ctipo) {
+        case AST_DECL_MAIN:
+            printf("#include <stdio.h>\n");
+            gerar_codigo(ptr->filho1);
+            printf("\n\nint main() {\n");
+            gerar_codigo(ptr->filho2);
+            printf("return 0;\n}\n\n");
+            break;
+
         case AST_LITERAL:
             printf("%s", ptr->valor);
             break;
@@ -188,11 +212,6 @@ void gerar_codigo(ASTNode* ptr) {
 			printf("/");
 			gerar_codigo(ptr->filho2);			
 			break;
-		case AST_DIFERENCA:	//alterações 02/12
-			gerar_codigo(ptr->filho1);
-			printf("/");
-			gerar_codigo(ptr->filho2);			
-			break;
 		case AST_MENOR:	//alterações 02/12
 			gerar_codigo(ptr->filho1);
 			printf("<");
@@ -215,7 +234,7 @@ void gerar_codigo(ASTNode* ptr) {
 			break;		
 		case AST_MOD:	//alterações 02/12
 			gerar_codigo(ptr->filho1);
-			printf("%");
+			printf("%c", '%');
 			gerar_codigo(ptr->filho2);			
 			break;
 		case AST_IMPLICA:	//alterações 02/12
@@ -266,3 +285,5 @@ void gerar_codigo(ASTNode* ptr) {
     }
 }
 
+
+#endif

@@ -3,14 +3,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#include <dados.h>
+#include "dados.h"
 
 void yyerror(char* s);
 extern void msgErro();
 %}
 
 %union {
-    ASTNode* ptr;
+    struct ASTNode* ptr;
 };
 
 %token CHAR
@@ -60,26 +60,37 @@ extern void msgErro();
 %nonassoc IFX
 %nonassoc SENAO
 
-%start programa_completo
+%start programa_completo 
+%type <ptr> programa_completo programa lista_declaracoes
 %%
 
 
 programa_completo
-    : lista_declaracoes PROGRAMA '{' programa '}'    { printf("sucesso\n"); }
-    | PROGRAMA '{' programa '}'    { printf("sucesso\n"); }
+    : lista_declaracoes PROGRAMA '{' programa '}' 
+        { struct ASTNode* prog = no_programa($1, $4);
+          gerar_codigo(prog);
+          liberar(prog);
+          printf("sucesso\n");
+        }
+    | PROGRAMA '{' programa '}' 
+        { struct ASTNode* prog = no_programa(NULL, $3);
+          gerar_codigo(prog);
+          liberar(prog);
+          printf("sucesso\n");
+        }
     ;
 
 tipo
-    : TIPO_BOOLEANO { $$.ptr = no_tipo(AST_TIPO_BOOLEANO); }
-    | TIPO_FLOAT { $$.ptr = no_tipo(AST_TIPO_FLOAT); }
-    | TIPO_CHAR { $$.ptr = no_tipo(AST_TIPO_CHAR); }
-    | TIPO_STRING { $$.ptr = no_tipo(AST_TIPO_STRING); }
-    | TIPO_INTEIRO { $$.ptr = no_tipo(AST_TIPO_INTEIRO); }
+    : TIPO_BOOLEANO 
+    | TIPO_FLOAT 
+    | TIPO_CHAR 
+    | TIPO_STRING 
+    | TIPO_INTEIRO 
     ;
 
 lista_declaracoes
-    : declaracao
-    | lista_declaracoes declaracao
+    : declaracao { $$ = NULL; }
+    | lista_declaracoes declaracao { $$ = NULL; }
     ;
 
 declaracao
@@ -97,19 +108,19 @@ declaracao_procedimento
 
 lista_argumentos
     : 
-    | tipo ID
-    | lista_argumentos ',' tipo ID
+    | tipo ID 
+    | lista_argumentos ',' tipo ID 
     ;
 
 programa
-    : 
-    | programa comandos
+    : { $$ = NULL; } 
+    | programa comandos { $$ = NULL; }
     ;
 
 
 comandos
     : ';'
-    | tipo ID ';' { $$.ptr = no_decl_var($1.ptr, $2.ptr); }
+    | tipo ID ';' 
     | tipo ID '=' expressao ';'
     | tipo ID '['  INTEIRO ']' ';'
     | tipo ID '['  INTEIRO ']' '=' '{' lista_inicializacao_vetor '}' ';'
