@@ -139,6 +139,31 @@ void gerar_codigo(ASTNode* ptr) {
 			printf("/");
 			gerar_codigo(ptr->filho2);			
 			break;
+		case AST_DIFERENCA:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf("/");
+			gerar_codigo(ptr->filho2);			
+			break;
+		case AST_MENOR:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf("<");
+			gerar_codigo(ptr->filho2);			
+			break;
+		case AST_MENOR_IGUAL:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf("<=");
+			gerar_codigo(ptr->filho2);			
+			break;
+		case AST_MAIOR:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf(">");
+			gerar_codigo(ptr->filho2);			
+			break;
+		case AST_MAIOR_IGUAL:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf(">=");
+			gerar_codigo(ptr->filho2);			
+			break;		
 		case AST_MOD:	//alterações 02/12
 			gerar_codigo(ptr->filho1);
 			printf("%");
