@@ -3,6 +3,7 @@
 #include <stdarg.h>
 
 enum Etipo { INTEIRO, FLUTUANTE, BOOLEANO, CARACTERE, STRING, VETOR, REFERENCIA};
+
 enum CTipo {
     /* identificadores e literais */
     AST_ID,
@@ -30,6 +31,14 @@ enum CTipo {
     AST_DISJUNCAO,
     AST_CONJUNCAO,
     
+
+    /* Comparacoes */
+    AST_MENOR,
+    AST_MENOR_IGUAL,
+    AST_MAIOR,
+    AST_MAIOR_IGUAL,
+    AST_IGUAL,
+    AST_DIFERENTE,
     
     /* Tipos */
     AST_TIPO_BOOLEANO,
@@ -179,6 +188,31 @@ void gerar_codigo(ASTNode* ptr) {
 			printf("/");
 			gerar_codigo(ptr->filho2);			
 			break;
+		case AST_DIFERENCA:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf("/");
+			gerar_codigo(ptr->filho2);			
+			break;
+		case AST_MENOR:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf("<");
+			gerar_codigo(ptr->filho2);			
+			break;
+		case AST_MENOR_IGUAL:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf("<=");
+			gerar_codigo(ptr->filho2);			
+			break;
+		case AST_MAIOR:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf(">");
+			gerar_codigo(ptr->filho2);			
+			break;
+		case AST_MAIOR_IGUAL:	//alterações 02/12
+			gerar_codigo(ptr->filho1);
+			printf(">=");
+			gerar_codigo(ptr->filho2);			
+			break;		
 		case AST_MOD:	//alterações 02/12
 			gerar_codigo(ptr->filho1);
 			printf("%");

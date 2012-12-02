@@ -1,0 +1,7 @@
+programa { 
+    inteiro flag = 0		
+	flutuante x = 1.0;
+    enquanto (flag < 10) {
+        flag = flag + 1;
+    }
+} 
