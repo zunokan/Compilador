@@ -23,6 +23,7 @@ inteiro faixa (flutuante b){
 programa { 
     inteiro flag = 0;		
 	flutuante x = 1;
+	string vetor[5] = {"aaaa","aaaa","aaaa","aaaa","aaaa"};
     inteiro teste = faixa(x);
 	caractere c = 'Z';
 	imprime(c);

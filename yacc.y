@@ -58,6 +58,15 @@ extern void msgErro();
 %start programa_completo
 %%
 
+enum Etipo { INTEIRO, FLUTUANTE, BOOLEANO, CARACTERE, STRING, VETOR, REFERENCIA};
+
+struct Tipo{
+	Etipo id;
+	Tipo *filho;
+};
+
+
+
 programa_completo
     : lista_declaracoes PROGRAMA '{' programa '}'    { printf("sucesso\n"); }
     | PROGRAMA '{' programa '}'    { printf("sucesso\n"); }
