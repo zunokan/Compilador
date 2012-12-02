@@ -37,46 +37,46 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     CHAR = 258,
-     FIM = 259,
-     ERRO = 260,
-     STRING = 261,
-     GE = 262,
-     LE = 263,
-     IGUAL = 264,
-     DIFERENTE = 265,
-     AND = 266,
-     OR = 267,
-     IMPLICA = 268,
-     BIIMPLICA = 269,
-     TIPO_BOOLEANO = 270,
-     TIPO_FLOAT = 271,
-     TIPO_CHAR = 272,
-     TIPO_STRING = 273,
-     TIPO_INTEIRO = 274,
-     CONJUNTO = 275,
-     LISTA = 276,
-     PROGRAMA = 277,
-     EXCECAO = 278,
-     TAD = 279,
-     PUBLICO = 280,
-     PRIVADO = 281,
-     VERDADEIRO = 282,
-     FALSO = 283,
-     PROCEDIMENTO = 284,
-     PARE = 285,
-     CONTINUE = 286,
-     RETORNE = 287,
-     PARA = 288,
-     CADA = 289,
-     EM = 290,
-     ATE = 291,
-     ENQUANTO = 292,
-     FACA = 293,
-     ITERADOR = 294,
-     LEIA = 295,
-     ESCREVA = 296,
-     SE = 297,
+     FIM = 258,
+     ERRO = 259,
+     GE = 260,
+     LE = 261,
+     IGUAL = 262,
+     DIFERENTE = 263,
+     AND = 264,
+     OR = 265,
+     IMPLICA = 266,
+     BIIMPLICA = 267,
+     TIPO_BOOLEANO = 268,
+     TIPO_FLOAT = 269,
+     TIPO_CHAR = 270,
+     TIPO_STRING = 271,
+     TIPO_INTEIRO = 272,
+     CONJUNTO = 273,
+     LISTA = 274,
+     PROGRAMA = 275,
+     EXCECAO = 276,
+     TAD = 277,
+     PUBLICO = 278,
+     PRIVADO = 279,
+     VERDADEIRO = 280,
+     FALSO = 281,
+     PROCEDIMENTO = 282,
+     PARE = 283,
+     CONTINUE = 284,
+     RETORNE = 285,
+     PARA = 286,
+     CADA = 287,
+     EM = 288,
+     ATE = 289,
+     ENQUANTO = 290,
+     FACA = 291,
+     ITERADOR = 292,
+     LEIA = 293,
+     ESCREVA = 294,
+     SE = 295,
+     CHAR = 296,
+     STRING = 297,
      INTEIRO = 298,
      FLOAT = 299,
      ID = 300,
@@ -85,46 +85,46 @@
    };
 #endif
 /* Tokens.  */
-#define CHAR 258
-#define FIM 259
-#define ERRO 260
-#define STRING 261
-#define GE 262
-#define LE 263
-#define IGUAL 264
-#define DIFERENTE 265
-#define AND 266
-#define OR 267
-#define IMPLICA 268
-#define BIIMPLICA 269
-#define TIPO_BOOLEANO 270
-#define TIPO_FLOAT 271
-#define TIPO_CHAR 272
-#define TIPO_STRING 273
-#define TIPO_INTEIRO 274
-#define CONJUNTO 275
-#define LISTA 276
-#define PROGRAMA 277
-#define EXCECAO 278
-#define TAD 279
-#define PUBLICO 280
-#define PRIVADO 281
-#define VERDADEIRO 282
-#define FALSO 283
-#define PROCEDIMENTO 284
-#define PARE 285
-#define CONTINUE 286
-#define RETORNE 287
-#define PARA 288
-#define CADA 289
-#define EM 290
-#define ATE 291
-#define ENQUANTO 292
-#define FACA 293
-#define ITERADOR 294
-#define LEIA 295
-#define ESCREVA 296
-#define SE 297
+#define FIM 258
+#define ERRO 259
+#define GE 260
+#define LE 261
+#define IGUAL 262
+#define DIFERENTE 263
+#define AND 264
+#define OR 265
+#define IMPLICA 266
+#define BIIMPLICA 267
+#define TIPO_BOOLEANO 268
+#define TIPO_FLOAT 269
+#define TIPO_CHAR 270
+#define TIPO_STRING 271
+#define TIPO_INTEIRO 272
+#define CONJUNTO 273
+#define LISTA 274
+#define PROGRAMA 275
+#define EXCECAO 276
+#define TAD 277
+#define PUBLICO 278
+#define PRIVADO 279
+#define VERDADEIRO 280
+#define FALSO 281
+#define PROCEDIMENTO 282
+#define PARE 283
+#define CONTINUE 284
+#define RETORNE 285
+#define PARA 286
+#define CADA 287
+#define EM 288
+#define ATE 289
+#define ENQUANTO 290
+#define FACA 291
+#define ITERADOR 292
+#define LEIA 293
+#define ESCREVA 294
+#define SE 295
+#define CHAR 296
+#define STRING 297
 #define INTEIRO 298
 #define FLOAT 299
 #define ID 300
@@ -141,12 +141,13 @@ typedef union YYSTYPE
 /* Line 2068 of yacc.c  */
 #line 12 "yacc.y"
 
+    char* valor;
     struct ASTNode* ptr;
 
 
 
 /* Line 2068 of yacc.c  */
-#line 150 "y.tab.h"
+#line 151 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

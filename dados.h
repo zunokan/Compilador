@@ -85,6 +85,30 @@ struct ASTNode* no_programa(struct ASTNode* ptr1, struct ASTNode* ptr2) {
     return tmp;
 }
 
+struct ASTNode* no_enquanto(struct ASTNode* exp, struct ASTNode* corpo) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_WHILE;
+    tmp->filho1 = exp;
+    tmp->filho2 = corpo;
+    return tmp;
+}
+
+struct ASTNode* no_para() {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_WHILE;
+    tmp->filho1 = NULL;
+    tmp->filho2 = NULL;
+    return tmp;
+}
+
+struct ASTNode* no_faca_enquanto(struct ASTNode* exp, struct ASTNode* corpo) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_WHILE;
+    tmp->filho1 = exp;
+    tmp->filho2 = corpo;
+    return tmp;
+}
+
 void liberar(struct ASTNode* ptr) {
     /* TODO */
 }

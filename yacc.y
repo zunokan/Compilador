@@ -10,13 +10,12 @@ extern void msgErro();
 %}
 
 %union {
+    char* valor;
     struct ASTNode* ptr;
 };
 
-%token CHAR
 %token FIM
 %token ERRO
-%token STRING
 %token GE
 %token LE
 %token IGUAL
@@ -53,15 +52,18 @@ extern void msgErro();
 %token LEIA
 %token ESCREVA
 %token SE
-%token INTEIRO
-%token FLOAT
-%token ID
+%token <valor> CHAR
+%token <valor> STRING
+%token <valor> INTEIRO
+%token <valor> FLOAT
+%token <valor> ID
 
 %nonassoc IFX
 %nonassoc SENAO
 
 %start programa_completo 
-%type <ptr> programa_completo programa lista_declaracoes
+%type <ptr> programa_completo programa lista_declaracoes comandos
+%type <ptr> expressao
 %%
 
 
@@ -125,9 +127,10 @@ comandos
     | tipo ID '['  INTEIRO ']' ';'
     | tipo ID '['  INTEIRO ']' '=' '{' lista_inicializacao_vetor '}' ';'
     | expressao ';'
-    | ENQUANTO '(' expressao ')' comandos { $$ = no_enquanto($3, $5); }
-    | FACA comandos ENQUANTO '(' expressao ')' ';' { $$ = no_faca_enquanto($2, $5); }
-    | PARA CADA ID EM conjunto comandos { $$ = no_para(
+    | ENQUANTO '(' expressao ')' comandos 
+        { $$ = no_enquanto($3, $5); }
+    | FACA comandos ENQUANTO '(' expressao ')' ';' 
+        { $$ = no_faca_enquanto($2, $5); }
     | SE '(' expressao ')' comandos %prec IFX
     | SE '(' expressao ')' comandos SENAO comandos
     | '{' lista_de_comandos '}'

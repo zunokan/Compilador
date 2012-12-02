@@ -1101,7 +1101,7 @@ YY_RULE_SETUP
 case 26:
 YY_RULE_SETUP
 #line 44 "lex.l"
-{count(); return(TIPO_BOOLEANO);}		//TRATAR OS OUTROS CASOS
+{count(); return(TIPO_BOOLEANO);}        //TRATAR OS OUTROS CASOS
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
@@ -1245,65 +1245,92 @@ YY_RULE_SETUP
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 73 "lex.l"
-{count(); return(INTEIRO);}
+#line 74 "lex.l"
+{
+    count();
+    yylval.valor = malloc(sizeof(char) * yyleng);
+    strcpy(yylval.valor, yytext); 
+    return INTEIRO;
+}
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 74 "lex.l"
-{count(); return(FLOAT);}
+#line 81 "lex.l"
+{
+    count(); 
+    yylval.valor = malloc(sizeof(char) * yyleng);
+    strcpy(yylval.valor, yytext); 
+    return FLOAT;
+}
 	YY_BREAK
 case 57:
 /* rule 57 can match eol */
 YY_RULE_SETUP
-#line 75 "lex.l"
-{count(); return(STRING); }
+#line 88 "lex.l"
+{
+    count(); 
+    yylval.valor = malloc(sizeof(char) * yyleng);
+    strcpy(yylval.valor, yytext); 
+    return(STRING); 
+}
 	YY_BREAK
 case 58:
 /* rule 58 can match eol */
 YY_RULE_SETUP
-#line 76 "lex.l"
-{count(); return(CHAR); }
+#line 95 "lex.l"
+{
+    count(); 
+    yylval.valor = malloc(sizeof(char) * yyleng);
+    strcpy(yylval.valor, yytext); 
+
+    return(CHAR); 
+}
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 77 "lex.l"
-{count(); return(ID);}
+#line 103 "lex.l"
+{
+    count();
+    yylval.valor = malloc(sizeof(char) * yyleng);
+    strcpy(yylval.valor, yytext); 
+
+    return(ID);
+}
 	YY_BREAK
 case 60:
 /* rule 60 can match eol */
 YY_RULE_SETUP
-#line 78 "lex.l"
+#line 111 "lex.l"
 {count();}
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 79 "lex.l"
+#line 112 "lex.l"
 {return(FIM);}
 	YY_BREAK
 case 62:
 /* rule 62 can match eol */
 YY_RULE_SETUP
-#line 80 "lex.l"
+#line 113 "lex.l"
 {count2();}
 	YY_BREAK
 case 63:
 /* rule 63 can match eol */
 YY_RULE_SETUP
-#line 81 "lex.l"
+#line 114 "lex.l"
 {count2();}
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 82 "lex.l"
+#line 115 "lex.l"
 {  count(); msgErro(); return(ERRO);}
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 84 "lex.l"
+#line 117 "lex.l"
 ECHO;
 	YY_BREAK
-#line 1307 "lex.yy.c"
+#line 1334 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2301,7 +2328,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 84 "lex.l"
+#line 117 "lex.l"
 
 
 
@@ -2314,47 +2341,47 @@ int linha = 1;
 
 void msgErro()
 {
-	printf("Erro de sintaxe na linha %d: [%s]\n", linha, yytext);
+    printf("Erro de sintaxe na linha %d: [%s]\n", linha, yytext);
 }
 
 void count()
 {
-	int i;
+    int i;
 
-	for (i = 0; yytext[i] != '\0'; i++)
-		if (yytext[i] == '\n'){
-			column = 0;
-			printf("\n");
-			linha++;
-		}
-		else if (yytext[i] == '\t')
-			column += 8 - (column % 8);
-		else
-				column++;
+    for (i = 0; yytext[i] != '\0'; i++)
+        if (yytext[i] == '\n'){
+            column = 0;
+            printf("\n");
+            linha++;
+        }
+        else if (yytext[i] == '\t')
+            column += 8 - (column % 8);
+        else
+                column++;
 }
 
 void count2()
 {
-	int i;
+    int i;
 
-	for (i = 0; yytext[i] != '\0'; i++)
-		if (yytext[i] == '\n'){
-			column = 0;
-			linha++;
-		}
-		else if (yytext[i] == '\t')
-			column += 8 - (column % 8);
-		else
-			column++;
+    for (i = 0; yytext[i] != '\0'; i++)
+        if (yytext[i] == '\n'){
+            column = 0;
+            linha++;
+        }
+        else if (yytext[i] == '\t')
+            column += 8 - (column % 8);
+        else
+            column++;
 }
 
 
 
 /*main() {
-	char c;
-	while((c = yylex()) != FIM){
-		printf(" %c", c);		
-	}
+    char c;
+    while((c = yylex()) != FIM){
+        printf(" %c", c);        
+    }
 }*/
 
 
