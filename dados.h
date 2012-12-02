@@ -3,7 +3,41 @@
 #include <stdarg.h>
 
 enum Etipo { INTEIRO, FLUTUANTE, BOOLEANO, CARACTERE, STRING, VETOR, REFERENCIA};
-enum CTipo { AST_ID, AST_SOMA, AST_SUBTRACAO, AST_MULTIPLICACAO, AST_DIFERENCA, AST_WHILE, AST_IF, ESCREVA, LEIA, AST_MOD, AST_IMPLICA, AST_BIIMPLICA, AST_DISJUNCAO, AST_CONJUNCAO, AST_DO_WHILE, AST_LITERAL};
+enum CTipo {
+    /* identificadores e literais */
+    AST_ID,
+    AST_LITERAL,
+
+    /* Lacos e testes condicionais */
+    AST_WHILE,
+    AST_DO_WHILE,
+    AST_IF,
+    
+    /* Entrada e saida */
+    ESCREVA,
+    LEIA
+ 
+    /* Operacoes aritmeticas*/
+    AST_SOMA,
+    AST_SUBTRACAO,
+    AST_MULTIPLICACAO,
+    AST_DIFERENCA,
+    AST_MOD,
+
+    /* Operacoes logicas */
+    AST_IMPLICA,
+    AST_BIIMPLICA,
+    AST_DISJUNCAO,
+    AST_CONJUNCAO,
+    
+    
+    /* Tipos */
+    AST_TIPO_BOOLEANO,
+    AST_TIPO_FLOAT,
+    AST_TIPO_CHAR,
+    AST_TIPO_STRING,
+    AST_TIPO_INTEIRO
+};
 
 struct Tipo{
 	enum Etipo id;
@@ -88,6 +122,12 @@ void dobrar_variavel(struct Variavel** ptr, int* tam) {
     free(*ptr);
     *ptr = tmp;
     *tam = novo_t;
+}
+
+ASTNode* no_tipo(enum CTipo ctipo) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = ctipo;
+    return tmp;
 }
 
 /***************************************/

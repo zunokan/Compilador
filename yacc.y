@@ -70,11 +70,11 @@ programa_completo
     ;
 
 tipo
-    : TIPO_BOOLEANO { $$.ptr = create_node(AST_TIPO_BOOLEANO, NULL, NULL,NULL); }
-    | TIPO_FLOAT
-    | TIPO_CHAR
-    | TIPO_STRING
-    | TIPO_INTEIRO
+    : TIPO_BOOLEANO { $$.ptr = no_tipo(AST_TIPO_BOOLEANO); }
+    | TIPO_FLOAT { $$.ptr = no_tipo(AST_TIPO_FLOAT); }
+    | TIPO_CHAR { $$.ptr = no_tipo(AST_TIPO_CHAR); }
+    | TIPO_STRING { $$.ptr = no_tipo(AST_TIPO_STRING); }
+    | TIPO_INTEIRO { $$.ptr = no_tipo(AST_TIPO_INTEIRO); }
     ;
 
 lista_declaracoes
@@ -109,7 +109,7 @@ programa
 
 comandos
     : ';'
-    | tipo ID ';'
+    | tipo ID ';' { $$.ptr = no_decl_var($1.ptr, $2.ptr); }
     | tipo ID '=' expressao ';'
     | tipo ID '['  INTEIRO ']' ';'
     | tipo ID '['  INTEIRO ']' '=' '{' lista_inicializacao_vetor '}' ';'
