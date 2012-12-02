@@ -209,15 +209,18 @@ expressao_posfixa
 
 expressao_primaria
     : literal
-    | ID
+    | ID chamada_funcao
     | '(' expressao ')'
-    | ID '(' lista_expressoes ')'
-    | ID '(' ')'
-    | 
     ;
 
-lista_expressoes:
-    : expressao
+chamada_funcao
+    : 
+    | '(' lista_expressoes ')'
+    ;
+
+lista_expressoes
+    : 
+    | expressao
     | lista_expressoes ',' expressao
     ;
 
