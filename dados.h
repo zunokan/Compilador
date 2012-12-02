@@ -51,3 +51,22 @@ int iguais( struct Tipo *t1, struct Tipo *t2){
 		return iguais(t1->filho, t2->filho);
 	}
 }
+
+void copiar_variavel(struct Variavel* dest, struct Variavel* src) {
+    strcpy(dest->nome, src->nome);
+    dest = clonar_tipo(src->tipo);
+}
+
+void dobrar_variavel(struct Variavel** ptr, int* tam) {
+    int i;
+    int novo_t = tam * 2;
+    struct Variavel* tmp = malloc(sizeof(struct Variavel) * novo_t);
+
+    for (int i = 0; i < tam; ++i) {
+        copiar_variavel(&tmp[i], &((*ptr)[i]));
+    } 
+
+    free(*ptr);
+    *ptr = tmp;
+    *tam = novo_t;
+}
