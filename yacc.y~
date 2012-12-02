@@ -215,7 +215,7 @@ expressao_primaria
     | ID '(' ')'
     ;
 
-lista_expressoes
+lista_expressoes:
     : expressao
     | lista_expressoes ',' expressao
     ;
