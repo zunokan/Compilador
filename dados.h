@@ -5,11 +5,26 @@
 enum Etipo { INTEIRO, FLUTUANTE, BOOLEANO, CARACTERE, STRING, VETOR, REFERENCIA};
 
 struct Tipo{
-	Etipo id;
-	Tipo *filho;
+	enum Etipo id;
+	struct Tipo *filho;
 };
 
-int iguais( Tipo *t1, Tipo *t2){
+struct Variavel {
+	char* nome;
+	struct Tipo* tipo;
+	
+	
+}
+
+struct Variavel* criar_variavel(char* name, enum Etipo t){
+	struct Variavel* tmp = malloc(sizeof(struct Variavel));
+	tmp->nome = name;
+	tmp->tipo->id = t;
+	tmp->tipo->filho = NULL;
+	return tmp;	
+}
+
+int iguais( struct Tipo *t1, struct Tipo *t2){
 	if (t1->id != t2->id)
 		return 0;	
 	if (t1->id == INTEIRO && t2->id == INTEIRO)
