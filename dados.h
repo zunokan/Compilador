@@ -18,10 +18,9 @@ struct Variavel {
 
 struct Variavel* criar_variavel(char* name, struct Tipo* t){
 	struct Variavel* tmp = malloc(sizeof(struct Variavel));
-	tmp->nome = malloc(sizeof(char * strlen(name)));
-	strcpy(tmp->nome, name);
 	tmp->nome = malloc(sizeof(char * (strlen(name) + 1)));
-	tmp->tipo = t;
+	strcpy(tmp->nome, name);
+	tmp->tipo = clonar_tipo(t);
 	return tmp;	
 }
 
