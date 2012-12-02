@@ -16,6 +16,14 @@ struct Variavel {
 	
 }
 
+struct Funcao {
+	char* nome;	
+	int numero_parametros;
+	int* parametros;
+	Tipo* retorno;
+	ASTNode* corpo;
+}
+
 struct Tipo* clonar_tipo(struct Tipo* t){
 	if (t == NULL)
 		return NULL;	
