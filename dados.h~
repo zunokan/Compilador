@@ -25,6 +25,8 @@ enum CTipo {
     AST_WHILE,
     AST_DO_WHILE,
     AST_IF,
+	AST_COMANDO,
+	AST_LISTA_COMANDOS,
     
     /* Entrada e saida */
     AST_ESCREVA,
@@ -42,7 +44,10 @@ enum CTipo {
     AST_BIIMPLICA,
     AST_DISJUNCAO,
     AST_CONJUNCAO,
-    
+	AST_CAST, /* Verificar isso depois*/
+    AST_UNARIA1,
+	AST_UNARIA2,
+	AST_UNARIA3,
 
     /* Comparacoes */
     AST_MENOR,
@@ -62,6 +67,7 @@ enum CTipo {
     AST_TIPO_INTEIRO
 };
 
+/* Estrutura do ASTNode */
 struct ASTNode{
     struct Tipo* tipo;
     char* valor;
@@ -70,6 +76,8 @@ struct ASTNode{
     struct ASTNode* filho3;
     enum CTipo ctipo;
 };
+
+
 
 struct ASTNode* no_tipo(enum CTipo ctipo) {
     struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
@@ -106,6 +114,214 @@ struct ASTNode* no_faca_enquanto(struct ASTNode* exp, struct ASTNode* corpo) {
     tmp->ctipo = AST_WHILE;
     tmp->filho1 = exp;
     tmp->filho2 = corpo;
+    return tmp;
+}
+
+struct ASTNode* no_literal(struct ASTNode* literal) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_LITERAL;
+    tmp->filho1 = exp;
+    tmp->filho2 = NULL;
+    return tmp;
+}
+
+struct ASTNode* no_literal(struct ASTNode* literal) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_LITERAL;
+    tmp->filho1 = exp;
+    tmp->filho2 = NULL;
+    return tmp;
+}
+
+struct ASTNode* no_leia(struct ASTNode* var) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_LEIA;
+    tmp->filho1 = var;
+    tmp->filho2 = NULL;
+    return tmp;
+}
+
+struct ASTNode* no_escreva(struct ASTNode* var) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_ESCREVA;
+    tmp->filho1 = var;
+    tmp->filho2 = NULL;
+    return tmp;
+}
+
+struct ASTNode* no_init_vetor(struct ASTNode* cauda, struct ASTNode* cabeca) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_VETOR;
+    tmp->filho1 = cauda;
+    tmp->filho2 = cabeca;
+    return tmp;
+}
+
+struct ASTNode* no_comando(struct ASTNode* cmd) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_COMANDO;
+    tmp->filho1 = cmd;
+    tmp->filho2 = NULL;
+    return tmp;
+}
+
+struct ASTNode* no_lista_comandos(struct ASTNode* lista, struct ASTNode* cmd) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_LISTA_COMANDOS;
+    tmp->filho1 = lista;
+    tmp->filho2 = cmd;
+    return tmp;
+}
+
+struct ASTNode* no_exp_adicao(struct ASTNode* exp1, struct ASTNode* exp2) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_SOMA;
+    tmp->filho1 = exp1;
+    tmp->filho2 = exp2;
+    return tmp;
+}
+
+struct ASTNode* no_exp_subtracao(struct ASTNode* exp1, struct ASTNode* exp2) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_SUBTRACAO;
+    tmp->filho1 = exp1;
+    tmp->filho2 = exp2;
+    return tmp;
+}
+struct ASTNode* no_exp_multiplicacao(struct ASTNode* exp1, struct ASTNode* exp2) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_MULTIPLICACAO;
+    tmp->filho1 = exp1;
+    tmp->filho2 = exp2;
+    return tmp;
+}
+
+struct ASTNode* no_exp_diferenca(struct ASTNode* exp1, struct ASTNode* exp2) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_DIFERENCA;
+    tmp->filho1 = exp1;
+    tmp->filho2 = exp2;
+    return tmp;
+}
+
+struct ASTNode* no_exp_mod(struct ASTNode* exp1, struct ASTNode* exp2) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_MOD;
+    tmp->filho1 = exp1;
+    tmp->filho2 = exp2;
+    return tmp;
+}
+
+struct ASTNode* no_exp_maior(struct ASTNode* exp1, struct ASTNode* exp2) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_MAIOR;
+    tmp->filho1 = exp1;
+    tmp->filho2 = exp2;
+    return tmp;
+}
+
+struct ASTNode* no_exp_menor(struct ASTNode* exp1, struct ASTNode* exp2) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_MENOR;
+    tmp->filho1 = exp1;
+    tmp->filho2 = exp2;
+    return tmp;
+}
+
+struct ASTNode* no_exp_GE(struct ASTNode* exp1, struct ASTNode* exp2) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_MAIOR_IGUAL;
+    tmp->filho1 = exp1;
+    tmp->filho2 = exp2;
+    return tmp;
+}
+
+struct ASTNode* no_exp_LE(struct ASTNode* exp1, struct ASTNode* exp2) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_MENOR_IGUAL;
+    tmp->filho1 = exp1;
+    tmp->filho2 = exp2;
+    return tmp;
+}
+
+
+struct ASTNode* no_exp_igual(struct ASTNode* exp1, struct ASTNode* exp2) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_IGUAL;
+    tmp->filho1 = exp1;
+    tmp->filho2 = exp2;
+    return tmp;
+}
+
+struct ASTNode* no_exp_diferente(struct ASTNode* exp1, struct ASTNode* exp2) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_DIFERENTE;
+    tmp->filho1 = exp1;
+    tmp->filho2 = exp2;
+    return tmp;
+}
+
+struct ASTNode* no_exp_e_logico(struct ASTNode* exp1, struct ASTNode* exp2) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_CONJUNCAO;
+    tmp->filho1 = exp1;
+    tmp->filho2 = exp2;
+    return tmp;
+}
+
+struct ASTNode* no_exp_ou_logico(struct ASTNode* exp1, struct ASTNode* exp2) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_DISJUNCAO;
+    tmp->filho1 = exp1;
+    tmp->filho2 = exp2;
+    return tmp;
+}
+
+struct ASTNode* no_exp_implica(struct ASTNode* exp1, struct ASTNode* exp2) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_IMPLICA;
+    tmp->filho1 = exp1;
+    tmp->filho2 = exp2;
+    return tmp;
+}
+
+struct ASTNode* no_exp_biimplica(struct ASTNode* exp1, struct ASTNode* exp2) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_BIIMPLICA;
+    tmp->filho1 = exp1;
+    tmp->filho2 = exp2;
+    return tmp;
+}
+
+struct ASTNode* no_exp_cast(struct ASTNode* exp1) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_CAST;
+    tmp->filho1 = exp1;
+    tmp->filho2 = NULL;
+    return tmp;
+}
+
+struct ASTNode* no_exp_unaria1(struct ASTNode* exp1) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_UNARIA1;
+    tmp->filho1 = exp1;
+    tmp->filho2 = NULL;
+    return tmp;
+}
+
+struct ASTNode* no_exp_unaria2(struct ASTNode* exp1) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_UNARIA2;
+    tmp->filho1 = exp1;
+    tmp->filho2 = NULL;
+    return tmp;
+}
+
+struct ASTNode* no_exp_unaria3(struct ASTNode* exp1) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+    tmp->ctipo = AST_UNARIA3;
+    tmp->filho1 = exp1;
+    tmp->filho2 = NULL;
     return tmp;
 }
 

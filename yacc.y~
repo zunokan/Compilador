@@ -74,11 +74,11 @@ programa_completo
     ;
 
 tipo
-    : TIPO_BOOLEANO { $$= no_inteiro($1);}
-    | TIPO_FLOAT 
-    | TIPO_CHAR 
-    | TIPO_STRING 
-    | TIPO_INTEIRO 
+    : TIPO_BOOLEANO { $$= no_booleano($1);}
+    | TIPO_FLOAT 	{ $$= no_float($1);}
+    | TIPO_CHAR 	{ $$= no_char($1);}
+    | TIPO_STRING 	{ $$= no_string($1);}
+    | TIPO_INTEIRO  { $$= no_inteiro($1);}
     ;
 
 lista_declaracoes
@@ -125,7 +125,7 @@ comandos
     | SE '(' expressao ')' comandos %prec IFX
     | SE '(' expressao ')' comandos SENAO comandos
     | '{' lista_de_comandos '}'
-    | ESCREVA '(' expressao ')' ';'
+    | ESCREVA '(' expressao ')' ';' { $$ = no_escreva($3);}
     | LEIA '(' ID  ')' ';' { $$ = no_leia($3);}
     | RETORNE expressao ';'
     ;
@@ -162,9 +162,9 @@ expressao
     | expressao BIIMPLICA expressao { $$= no_exp_biimplica($1, $3);}
 	| expressao_de_cast { $$= no_exp_cast($1);}
 	| expressao_posfixa { $$= no_exp_posfixa($1);}
-	| '+' expressao { $$= no_exp_unaria($2);} //verificar isso
-	| '-' expressao { $$= no_exp_unaria($2);} //verificar isso
-	| '!' expressao { $$= no_exp_unaria($2);} //verificar isso
+	| '+' expressao { $$= no_exp_unaria1($2);} //verificar isso
+	| '-' expressao { $$= no_exp_unaria2($2);} //verificar isso
+	| '!' expressao { $$= no_exp_unaria3($2);} //verificar isso
 	| literal { $$= no_literal($1);}
 	| ID chamada_de_funcao { $$= no_chamada_funcao($2);}
     | expressao_atribuicao { $$= no_exp_atribuicao($1);}
