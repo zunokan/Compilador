@@ -143,29 +143,65 @@ lista_de_comandos
     
 
 expressao
-    :
-    | '(' expressao ')' 
-    | expressao '+' expressao
-    | expressao '-' expressao
-    | expressao '*' expressao
-    | expressao '/' expressao
-    | expressao '%' expressao
-    | expressao '>' expressao
-    | expressao '<' expressao
-    | expressao GE expressao
-    | expressao LE expressao
-    | expressao IGUAL expressao
-    | expressao DIFERENTE expressao
-    | expressao AND expressao
-    | expressao OR expressao
-    | expressao IMPLICA expressao
-    | expressao BIIMPLICA expressao
     : expressao_atribuicao { $$= no_exp_atribuicao($1);}
     ;
 
 expressao_atribuicao
     : expressao_biimplica { $$= no_exp_biimplica($1);}
     | expressao_unaria operador_atribuicao expressao_atribuicao { $$= no_exp_tipo1($1, $2, $3);}
+    ;
+
+
+expressao_biimplica
+    : expressao_implica { $$= no_exp_implica($1);}
+    | expressao_biimplica BIIMPLICA expressao_implica { $$= no_exp_tipo2($1, $3);}
+    ;
+
+expressao_implica
+    : expressao_condicional { $$= no_condicional($1);}
+    | expressao_implica IMPLICA expressao_condicional { $$= no_exp_tipo3($1, $3);} //acho que no_exp_tipo3 e no_exp_tipo2 podem ser a mesma coisa
+    ;
+    
+expressao_condicional
+    : expressao_ou_logico { $$= no_exp_ou_logico($1);}
+    ;
+
+expressao_ou_logico
+    : expressao_e_logico { $$= no_exp_e_logico($1);}
+    | expressao_ou_logico OR expressao_e_logico { $$= no_exp_tipo4($1, $3);}
+    ;
+
+expressao_e_logico
+    : expressao_igualdade { $$= no_exp_igualdade($1);}
+    | expressao_e_logico AND expressao_igualdade { $$= no_exp_tipo4($1, $3);}
+    ;
+
+expressao_igualdade
+    : expressao_relacional { $$= no_exp_relacional($1);}
+    | expressao_igualdade IGUAL expressao_relacional { $$= no_exp_tipo5($1, $3);}
+    | expressao_igualdade DIFERENTE expressao_relacional { $$= no_exp_tipo6($1, $3);}
+    ;
+
+expressao_relacional
+    : expressao_aditiva { $$= no_exp_aditiva($1);}
+    | expressao_relacional '<' expressao_aditiva { $$= no_exp_tipo7($1, $3);}
+    | expressao_relacional '>' expressao_aditiva { $$= no_exp_tipo8($1, $3);}
+    | expressao_relacional GE expressao_aditiva { $$= no_exp_tipo9($1, $3);}
+    | expressao_relacional LE expressao_aditiva { $$= no_exp_tipo10($1, $3);}
+    ;
+
+expressao_aditiva
+    : expressao_multiplicativa { $$= no_exp_multiplicativa($1);}
+    | expressao_aditiva '+' expressao_multiplicativa { $$= no_exp_tipo11($1, $3);}
+    | expressao_aditiva '-' expressao_multiplicativa { $$= no_exp_tipo12($1, $3);}
+    ;
+
+
+expressao_multiplicativa
+    : expressao_de_cast { $$= no_exp_cast($1);}
+    | expressao_multiplicativa '*' expressao_de_cast { $$= no_exp_tipo13($1, $3);}
+    | expressao_multiplicativa '/' expressao_de_cast { $$= no_exp_tipo14($1, $3);}
+    | expressao_multiplicativa '%' expressao_de_cast { $$= no_exp_tipo15($1, $3);}
     ;
 
 expressao_de_cast
