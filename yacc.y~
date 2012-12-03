@@ -29,26 +29,17 @@ extern void msgErro();
 %token TIPO_CHAR
 %token TIPO_STRING
 %token TIPO_INTEIRO
-%token CONJUNTO
 %token LISTA
 %token PROGRAMA
-%token EXCECAO
 %token TAD
-%token PUBLICO
-%token PRIVADO
 %token VERDADEIRO
 %token FALSO
 %token PROCEDIMENTO
-%token PARE
-%token CONTINUE
 %token RETORNE
-%token PARA
-%token CADA
 %token EM
 %token ATE
 %token ENQUANTO
 %token FACA
-%token ITERADOR
 %token LEIA
 %token ESCREVA
 %token SE
@@ -126,7 +117,7 @@ comandos
     | tipo ID '=' expressao ';'
     | tipo ID '['  INTEIRO ']' ';'
     | tipo ID '['  INTEIRO ']' '=' '{' lista_inicializacao_vetor '}' ';'
-    | expressao ';'
+    | expressao ';'{ $$ = no_exp($1);}
     | ENQUANTO '(' expressao ')' comandos 
         { $$ = no_enquanto($3, $5); }
     | FACA comandos ENQUANTO '(' expressao ')' ';' 
@@ -135,88 +126,79 @@ comandos
     | SE '(' expressao ')' comandos SENAO comandos
     | '{' lista_de_comandos '}'
     | ESCREVA '(' expressao ')' ';'
-    | LEIA '(' ID  ')' ';'
+    | LEIA '(' ID  ')' ';' { $$ = no_leia($3);}
     | RETORNE expressao ';'
     ;
 
 lista_inicializacao_vetor
-    : literal
-    | lista_inicializacao_vetor ',' literal
+    : literal { $$= no_literal($1);}
+    | lista_inicializacao_vetor ',' literal { $$= no_init_vetor($1, $3);}
     ;
     
-conjunto
-    : ID
-    | '{' literal_conjunto '}'
-    ;
-
-literal_conjunto
-    :
-    | literal
-    | literal_conjunto ',' literal
-    ;
 
 lista_de_comandos
-    : comandos
-    | lista_de_comandos comandos
+    : comandos	{ $$= no_comando($1);}
+    | lista_de_comandos comandos { $$= no_lista_comandos($1, $2);}
     ;
     
 
 expressao
-    : expressao_atribuicao
+    : expressao_atribuicao { $$= no_exp_atribuicao($1);}
     ;
 
 expressao_atribuicao
-    : expressao_biimplica
-    | expressao_unaria operador_atribuicao expressao_atribuicao
+    : expressao_biimplica { $$= no_exp_biimplica($1);}
+    | expressao_unaria operador_atribuicao expressao_atribuicao { $$= no_exp_tipo1($1, $2, $3);}
     ;
 
 
 expressao_biimplica
-    : expressao_implica
-    | expressao_biimplica BIIMPLICA expressao_implica
+    : expressao_implica { $$= no_exp_implica($1);}
+    | expressao_biimplica BIIMPLICA expressao_implica { $$= no_exp_tipo2($1, $3);}
     ;
 
 expressao_implica
-    : expressao_condicional
-    | expressao_implica IMPLICA expressao_condicional
+    : expressao_condicional { $$= no_condicional($1);}
+    | expressao_implica IMPLICA expressao_condicional { $$= no_exp_tipo3($1, $3);} //acho que no_exp_tipo3 e no_exp_tipo2 podem ser a mesma coisa
     ;
     
 expressao_condicional
-    : expressao_ou_logico
+    : expressao_ou_logico { $$= no_exp_ou_logico($1);}
     ;
 
 expressao_ou_logico
-    : expressao_e_logico
-    | expressao_ou_logico OR expressao_e_logico
+    : expressao_e_logico { $$= no_exp_e_logico($1);}
+    | expressao_ou_logico OR expressao_e_logico { $$= no_exp_tipo4($1, $3);}
     ;
 
 expressao_e_logico
-    : expressao_igualdade
-    | expressao_e_logico AND expressao_igualdade
+    : expressao_igualdade { $$= no_exp_igualdade($1);}
+    | expressao_e_logico AND expressao_igualdade { $$= no_exp_tipo4($1, $3);}
     ;
 
 expressao_igualdade
-    : expressao_relacional
-    | expressao_igualdade IGUAL expressao_relacional
-    | expressao_igualdade DIFERENTE expressao_relacional
+    : expressao_relacional { $$= no_exp_relacional($1);}
+    | expressao_igualdade IGUAL expressao_relacional { $$= no_exp_tipo5($1, $3);}
+    | expressao_igualdade DIFERENTE expressao_relacional { $$= no_exp_tipo6($1, $3);}
     ;
 
 expressao_relacional
-    : expressao_aditiva
-    | expressao_relacional '<' expressao_aditiva
-    | expressao_relacional '>' expressao_aditiva
-    | expressao_relacional GE expressao_aditiva
-    | expressao_relacional LE expressao_aditiva
+    : expressao_aditiva { $$= no_exp_aditiva($1);}
+    | expressao_relacional '<' expressao_aditiva { $$= no_exp_tipo7($1, $3);}
+    | expressao_relacional '>' expressao_aditiva { $$= no_exp_tipo8($1, $3);}
+    | expressao_relacional GE expressao_aditiva { $$= no_exp_tipo9($1, $3);}
+    | expressao_relacional LE expressao_aditiva { $$= no_exp_tipo10($1, $3);}
     ;
 
 expressao_aditiva
-    : expressao_multiplicativa
-    | expressao_aditiva '+' expressao_multiplicativa
-    | expressao_aditiva '-' expressao_multiplicativa
+    : expressao_multiplicativa { $$= no_exp_multiplicativa($1);}
+    | expressao_aditiva '+' expressao_multiplicativa { $$= no_exp_tipo11($1, $3);}
+    | expressao_aditiva '-' expressao_multiplicativa { $$= no_exp_tipo12($1, $3);}
     ;
 
+
 expressao_multiplicativa
-    : expressao_de_cast
+    : expressao_de_cast { $$= no_exp_tipo7($1, $3);}
     | expressao_multiplicativa '*' expressao_de_cast
     | expressao_multiplicativa '/' expressao_de_cast
     | expressao_multiplicativa '%' expressao_de_cast

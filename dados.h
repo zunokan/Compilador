@@ -62,6 +62,7 @@ enum CTipo {
     AST_TIPO_INTEIRO
 };
 
+/* Estrutura do ASTNode */
 struct ASTNode{
     struct Tipo* tipo;
     char* valor;
@@ -70,6 +71,8 @@ struct ASTNode{
     struct ASTNode* filho3;
     enum CTipo ctipo;
 };
+
+
 
 struct ASTNode* no_tipo(enum CTipo ctipo) {
     struct ASTNode* tmp = malloc(sizeof(struct ASTNode));

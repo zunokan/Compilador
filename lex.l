@@ -98,11 +98,11 @@ WHITESPACE        [ \t\n\r]
     return(ID);
 }
 
-{WHITESPACE}+             {count();}
-[\0]                {return(FIM);}
-"//"(.|\t)*"\n"            {count2();}
-"/*"(.|{WHITESPACE}*)*"*/"    {count2();}
-.                 {  count(); msgErro(); return(ERRO);}
+{WHITESPACE}+          		{count();}
+[\0]                		{return(FIM);}
+"//"(.|\t)*"\n"             {count2();}
+"/*"(.|{WHITESPACE}*)*"*/"  {count2();}
+.                 			{count(); msgErro(); return(ERRO);}
 
 %%
 
