@@ -160,22 +160,21 @@ expressao
     | expressao OR expressao { $$= no_exp_ou_logico($1, $3);}
     | expressao IMPLICA expressao { $$= no_exp_implica($1, $3);}
     | expressao BIIMPLICA expressao { $$= no_exp_biimplica($1, $3);}
-	| expressao_unaria { $$= no_exp_unaria($1);}
-	| expressao_cast { $$= no_exp_cast($1);}
+	| expressao_de_cast { $$= no_exp_cast($1);}
 	| expressao_posfixa { $$= no_exp_posfixa($1);}
 	| '+' expressao { $$= no_exp_unaria($2);} //verificar isso
 	| '-' expressao { $$= no_exp_unaria($2);} //verificar isso
 	| '!' expressao { $$= no_exp_unaria($2);} //verificar isso
 	| literal { $$= no_literal($1);}
-	| ID chamada de funcao { $$= no_chamada_funcao($2);}
-    : expressao_atribuicao { $$= no_exp_atribuicao($1);}
+	| ID chamada_de_funcao { $$= no_chamada_funcao($2);}
+    | expressao_atribuicao { $$= no_exp_atribuicao($1);}
     ;
 
 expressao_atribuicao
     : expressao_unaria operador_atribuicao expressao_atribuicao { $$= no_exp_tipo1($1, $2, $3);}
     ;
 
-/* expressao_de_cast
+expressao_de_cast
     : expressao_unaria { $$= no_exp_unaria($1);}
     ; 
 
@@ -187,11 +186,11 @@ expressao_posfixa
 
 expressao_primaria
     : literal { $$= no_literal($1);}
-    | ID chamada_funcao { $$= no_chamada_funcao($2);}
+    | ID chamada_de_funcao { $$= no_chamada_funcao($2);}
     | '(' expressao ')' { $$= no_exp($2);}
     ;
- */
-chamada_funcao
+ 
+chamada_de_funcao
     : 
     | '(' lista_expressoes ')' { $$= no_lista_exp($2);}
     ;
