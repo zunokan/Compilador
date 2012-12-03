@@ -120,22 +120,30 @@ programa
 
 
 comandos
-    : ';'
-    | tipo ID ';' 
-    | tipo ID '=' expressao ';'
-    | tipo ID '['  INTEIRO ']' ';'
-    | tipo ID '['  INTEIRO ']' '=' '{' lista_inicializacao_vetor '}' ';'
-    | expressao ';'{ $$ = no_exp($1);}
+    : ';' { $$ = opr(';', NULL, NULL, NULL); }
+    | tipo ID ';' { $$ = NULL; }
+    | tipo ID '=' expressao ';' { $$ = NULL; }
+    | tipo ID '['  INTEIRO ']' ';' { $$ = NULL; }
+    | tipo ID '['  INTEIRO ']' '=' '{' lista_inicializacao_vetor '}' ';' 
+        { $$ = NULL; }
+    | expressao ';'
+        { $$ = $1; }
     | ENQUANTO '(' expressao ')' comandos 
-        { $$ = no_enquanto($3, $5); }
+        { $$ = opr(AST_WHILE, $3, $5, NULL); }
     | FACA comandos ENQUANTO '(' expressao ')' ';' 
-        { $$ = no_faca_enquanto($2, $5); }
+        { $$ = opr(AST_DO_WHILE, $2, $5, NULL); }
     | SE '(' expressao ')' comandos %prec IFX
+        { $$ = opr(AST_IF, $3, $5, NULL); }
     | SE '(' expressao ')' comandos SENAO comandos
+        { $$ = opr(AST_IF, $3, $4, $5); }
     | '{' lista_de_comandos '}'
+        { $$ = $1; }
     | ESCREVA '(' expressao ')' ';'
-    | LEIA '(' ID  ')' ';' { $$ = no_leia($3);}
+        { $$ = opr(AST_ESCREVA, $3, NULL, NULL); }
+    | LEIA '(' ID  ')' ';' 
+        { $$ = opr(AST_LEIA, $3, NULL, NULL); }
     | RETORNE expressao ';'
+        { $$ = opr(AST_RETORNE, $2, NULL, NULL); }
     ;
 
 lista_inicializacao_vetor

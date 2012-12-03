@@ -16,6 +16,7 @@ enum CTipo {
     AST_DECL_FUN = 500,
     AST_DECL_PROC,
     AST_DECL_MAIN,
+    AST_RETORNE,
 
     /* identificadores e literais */
     AST_ID,
