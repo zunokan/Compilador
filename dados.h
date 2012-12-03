@@ -105,7 +105,9 @@ struct ASTNode* lit(int op, char* id) {
     tmp->filho1 = NULL;
     tmp->filho2 = NULL;
     tmp->filho3 = NULL;
-    strcpy(tmp->valor, id);
+    if (id != NULL) {
+        strcpy(tmp->valor, id);
+    }
 
     return tmp;
    
@@ -262,7 +264,7 @@ void gerar_codigo(struct ASTNode* ptr) {
             printf("%s", ptr->valor);
             break;
 
-        /* Lacos */
+        /* Lacos e condicoes */
         case AST_WHILE:
             printf("L%i:\n", lbl1 = lbl++);
             printf("if (!(");
@@ -272,6 +274,29 @@ void gerar_codigo(struct ASTNode* ptr) {
             printf("goto L%i;\n", lbl1);
             printf("\nL%i:\n", lbl2);
             break;
+
+        case AST_IF:
+            lbl1 = lbl++;
+            lbl2 = lbl++;
+
+            if (ptr->filho3 == NULL) {
+                printf("if (!(");
+                gerar_codigo(ptr->filho1);
+                printf(")) goto L%i;\n", lbl1);
+                gerar_codigo(ptr->filho2);
+                printf("\nL%i:\n", lbl1);
+            } else {
+                printf("if (!(");
+                gerar_codigo(ptr->filho1);
+                printf(")) goto L%i;\n", lbl1);
+                gerar_codigo(ptr->filho2);
+                printf("goto L%i;\n", lbl2);
+                printf("L%i:\n", lbl1);
+                gerar_codigo(ptr->filho3);
+                printf("\nL%i:\n", lbl2);
+         
+            }
+            break; 
 
         /* Atribuicao */
         case '=':
@@ -284,73 +309,85 @@ void gerar_codigo(struct ASTNode* ptr) {
         /* Operacoes aritmeticas */
         case '+':    //alterações 02/12
             gerar_codigo(ptr->filho1);
-            printf("+");
+            printf(" + ");
             gerar_codigo(ptr->filho2);            
             break;
 
         case '-':    //alterações 02/12
             gerar_codigo(ptr->filho1);
-            printf("-");
+            printf(" - ");
             gerar_codigo(ptr->filho2);            
             break;
 
         case '*':    //alterações 02/12
             gerar_codigo(ptr->filho1);
-            printf("*");
+            printf(" * ");
             gerar_codigo(ptr->filho2);            
             break;        
 
         case '/':    //alterações 02/12
             gerar_codigo(ptr->filho1);
-            printf("/");
+            printf(" / ");
             gerar_codigo(ptr->filho2);            
             break;
 
         case '%':    //alterações 02/12
             gerar_codigo(ptr->filho1);
-            printf("%c", '%');
+            printf(" %c ", '%');
             gerar_codigo(ptr->filho2);            
             break;
 
         /* Comparacoes */
         case '<':    //alterações 02/12
             gerar_codigo(ptr->filho1);
-            printf("<");
+            printf(" < ");
             gerar_codigo(ptr->filho2);            
             break;
 
         case AST_LE:    //alterações 02/12
             gerar_codigo(ptr->filho1);
-            printf("<=");
+            printf(" <= ");
             gerar_codigo(ptr->filho2);            
             break;
 
         case '>':    //alterações 02/12
             gerar_codigo(ptr->filho1);
-            printf(">");
+            printf(" > ");
             gerar_codigo(ptr->filho2);            
             break;
 
         case AST_GE:    //alterações 02/12
             gerar_codigo(ptr->filho1);
-            printf(">=");
+            printf(" >= ");
             gerar_codigo(ptr->filho2);            
-            break;        
+            break;
 
+        case AST_IGUAL:
+            gerar_codigo(ptr->filho1);
+            printf(" == ");
+            gerar_codigo(ptr->filho2);        
+            break;
+
+        case AST_DIFERENTE:
+            gerar_codigo(ptr->filho1);
+            printf(" != ");
+            gerar_codigo(ptr->filho2); 
+            break;
 
         /* Operadores logicos */
+        /* -> = (!a && !b) || (!a && b) || (a && b) */
         case AST_IMPLICA:    //alterações 02/12
-            printf("((!");            
+            printf("(!(");            
             gerar_codigo(ptr->filho1);
-            printf(" &&    !");
+            printf(") && !(");
             gerar_codigo(ptr->filho2);
-            printf(") || (!");
+            printf(")) || (!(");
             gerar_codigo(ptr->filho1);
-            printf(" && ");
+            printf(") && (");
             gerar_codigo(ptr->filho2);
-            printf(") || (");
+            printf(")) || (");
             gerar_codigo(ptr->filho1);
-            printf(" && ");
+            printf(") && (");
             gerar_codigo(ptr->filho2);
             printf("))");            
             break;

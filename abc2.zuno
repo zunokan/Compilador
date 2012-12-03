@@ -1,5 +1,17 @@
 programa {
-    enquanto (x < 10) {
+    se (x > 3) {
+        x = x * 2;
+    } senao {
+        x = x - 1;
+    }
+
+    enquanto (x < 10 && x != 5) {
         x = x + 1;
+        y = x + var;
+        enquanto (x < 10 && x != 5) {
+            x = x + 1;
+            y = x + var;
+            baz = (verdadeiro && falso) -> verdadeiro;
+        }
     }
 }
