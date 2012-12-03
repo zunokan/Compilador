@@ -68,13 +68,13 @@ extern void msgErro();
 
 programa_completo
     : lista_declaracoes PROGRAMA '{' programa '}' 
-        { struct ASTNode* prog = no_programa($1, $4);
+        { struct ASTNode* prog = opr(AST_DECL_MAIN, $1, $4, NULL);
           gerar_codigo(prog);
           liberar(prog);
           printf("sucesso\n");
         }
     | PROGRAMA '{' programa '}' 
-        { struct ASTNode* prog = no_programa(NULL, $3);
+        { struct ASTNode* prog = opr(AST_DECL_MAIN, NULL, $3, NULL);
           gerar_codigo(prog);
           liberar(prog);
           printf("sucesso\n");
@@ -100,11 +100,11 @@ declaracao
     ;
 
 declaracao_funcao
-    : tipo ID '(' lista_argumentos ')' comandos
+    : tipo ID '(' lista_argumentos ')' comandos { $$ = NULL; }
     ;
 
 declaracao_procedimento
-    : PROCEDIMENTO ID '(' lista_argumentos ')' comandos
+    : PROCEDIMENTO ID '(' lista_argumentos ')' comandos { $$ = NULL; }
     ;
 
 lista_argumentos
@@ -135,13 +135,13 @@ comandos
     | SE '(' expressao ')' comandos %prec IFX
         { $$ = opr(AST_IF, $3, $5, NULL); }
     | SE '(' expressao ')' comandos SENAO comandos
-        { $$ = opr(AST_IF, $3, $4, $5); }
+        { $$ = opr(AST_IF, $3, $5, $7); }
     | '{' lista_de_comandos '}'
-        { $$ = $1; }
+        { $$ = $2; }
     | ESCREVA '(' expressao ')' ';'
         { $$ = opr(AST_ESCREVA, $3, NULL, NULL); }
     | LEIA '(' ID  ')' ';' 
-        { $$ = opr(AST_LEIA, $3, NULL, NULL); }
+        { $$ = opr(AST_LEIA, lit(AST_ID, $3), NULL, NULL); }
     | RETORNE expressao ';'
         { $$ = opr(AST_RETORNE, $2, NULL, NULL); }
     ;
