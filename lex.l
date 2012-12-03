@@ -51,8 +51,6 @@ WHITESPACE        [ \t\n\r]
 "falso"                {count(); return(FALSO);}
 "procedimento"            {count(); return(PROCEDIMENTO);}
 "retorne"            {count(); return(RETORNE);}
-"para"                {count(); return(PARA);}
-"cada"              {count(); return(CADA);}
 "ate"                {count(); return(ATE);}
 "enquanto"            {count(); return(ENQUANTO);}
 "faca"                {count(); return(FACA);}

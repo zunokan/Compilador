@@ -52,36 +52,27 @@
      TIPO_CHAR = 270,
      TIPO_STRING = 271,
      TIPO_INTEIRO = 272,
-     CONJUNTO = 273,
-     LISTA = 274,
-     PROGRAMA = 275,
-     EXCECAO = 276,
-     TAD = 277,
-     PUBLICO = 278,
-     PRIVADO = 279,
-     VERDADEIRO = 280,
-     FALSO = 281,
-     PROCEDIMENTO = 282,
-     PARE = 283,
-     CONTINUE = 284,
-     RETORNE = 285,
-     PARA = 286,
-     CADA = 287,
-     EM = 288,
-     ATE = 289,
-     ENQUANTO = 290,
-     FACA = 291,
-     ITERADOR = 292,
-     LEIA = 293,
-     ESCREVA = 294,
-     SE = 295,
-     CHAR = 296,
-     STRING = 297,
-     INTEIRO = 298,
-     FLOAT = 299,
-     ID = 300,
-     IFX = 301,
-     SENAO = 302
+     LISTA = 273,
+     PROGRAMA = 274,
+     TAD = 275,
+     VERDADEIRO = 276,
+     FALSO = 277,
+     PROCEDIMENTO = 278,
+     RETORNE = 279,
+     EM = 280,
+     ATE = 281,
+     ENQUANTO = 282,
+     FACA = 283,
+     LEIA = 284,
+     ESCREVA = 285,
+     SE = 286,
+     CHAR = 287,
+     STRING = 288,
+     INTEIRO = 289,
+     FLOAT = 290,
+     ID = 291,
+     IFX = 292,
+     SENAO = 293
    };
 #endif
 /* Tokens.  */
@@ -100,36 +91,27 @@
 #define TIPO_CHAR 270
 #define TIPO_STRING 271
 #define TIPO_INTEIRO 272
-#define CONJUNTO 273
-#define LISTA 274
-#define PROGRAMA 275
-#define EXCECAO 276
-#define TAD 277
-#define PUBLICO 278
-#define PRIVADO 279
-#define VERDADEIRO 280
-#define FALSO 281
-#define PROCEDIMENTO 282
-#define PARE 283
-#define CONTINUE 284
-#define RETORNE 285
-#define PARA 286
-#define CADA 287
-#define EM 288
-#define ATE 289
-#define ENQUANTO 290
-#define FACA 291
-#define ITERADOR 292
-#define LEIA 293
-#define ESCREVA 294
-#define SE 295
-#define CHAR 296
-#define STRING 297
-#define INTEIRO 298
-#define FLOAT 299
-#define ID 300
-#define IFX 301
-#define SENAO 302
+#define LISTA 273
+#define PROGRAMA 274
+#define TAD 275
+#define VERDADEIRO 276
+#define FALSO 277
+#define PROCEDIMENTO 278
+#define RETORNE 279
+#define EM 280
+#define ATE 281
+#define ENQUANTO 282
+#define FACA 283
+#define LEIA 284
+#define ESCREVA 285
+#define SE 286
+#define CHAR 287
+#define STRING 288
+#define INTEIRO 289
+#define FLOAT 290
+#define ID 291
+#define IFX 292
+#define SENAO 293
 
 
 
@@ -147,7 +129,7 @@ typedef union YYSTYPE
 
 
 /* Line 2068 of yacc.c  */
-#line 151 "y.tab.h"
+#line 133 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

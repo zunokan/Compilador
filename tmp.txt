@@ -1,0 +1,15 @@
+chamada_ou_atribuicao { $$= no_chamada_funcao($1);}
+    ;
+
+chamada_ou_atribuicao
+    :
+    | '=' expressao
+    | '(' lista_expressoes ')' { $$= no_lista_exp($2);}
+    ;
+
+lista_expressoes
+    :
+    | expressao { $$= no_exp($1);}
+    | lista_expressoes ',' expressao { $$= no_exp_tipo19($1, $3);}
+    ;
+

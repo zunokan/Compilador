@@ -52,9 +52,17 @@ extern void msgErro();
 %nonassoc IFX
 %nonassoc SENAO
 
-%start programa_completo 
-%type <ptr> programa_completo programa lista_declaracoes comandos
-%type <ptr> expressao
+%start programa_completo
+%type <ptr> literal lista_expressoes chamada_funcao expressao_primaria
+%type <ptr> expressao_posfixa expressao_unaria expressao_de_cast
+%type <ptr> expressao_multiplicativa expressao_aditiva
+%type <ptr> expressao_relacional expressao_igualdade expressao_e_logico
+%type <ptr> expressao_ou_logico expressao_condicional expressao_implica
+%type <ptr> expressao_biimplica expressao_atribuicao expressao 
+%type <ptr> lista_de_comandos lista_inicializacao_vetor comandos
+%type <ptr> declaracao lista_declaracoes tipo declaracao_funcao
+%type <ptr> programa_completo programa declaracao_procedimento
+%type <ptr> lista_argumentos
 %%
 
 
@@ -74,21 +82,21 @@ programa_completo
     ;
 
 tipo
-    : TIPO_BOOLEANO { $$= no_booleano($1);}
-    | TIPO_FLOAT 	{ $$= no_float($1);}
-    | TIPO_CHAR 	{ $$= no_char($1);}
-    | TIPO_STRING 	{ $$= no_string($1);}
-    | TIPO_INTEIRO  { $$= no_inteiro($1);}
+    : TIPO_BOOLEANO { $$ = opr(AST_TIPO_BOOLEANO, NULL, NULL, NULL); }
+    | TIPO_FLOAT    { $$ = opr(AST_TIPO_FLOAT, NULL, NULL, NULL); }
+    | TIPO_CHAR     { $$ = opr(AST_TIPO_CHAR, NULL, NULL, NULL); }
+    | TIPO_STRING   { $$ = opr(AST_TIPO_STRING, NULL, NULL, NULL); }
+    | TIPO_INTEIRO  { $$ = opr(AST_TIPO_INTEIRO, NULL, NULL, NULL); }
     ;
 
 lista_declaracoes
-    : declaracao { $$ = NULL; }
-    | lista_declaracoes declaracao { $$ = NULL; }
+    : declaracao { $$ = $1; }
+    | lista_declaracoes declaracao { $$ = opr('@', $1, $2, NULL); }
     ;
 
 declaracao
-    : declaracao_funcao
-    | declaracao_procedimento
+    : declaracao_funcao { $$ = $1; }
+    | declaracao_procedimento { $$ = $1; }
     ;
 
 declaracao_funcao
@@ -125,94 +133,147 @@ comandos
     | SE '(' expressao ')' comandos %prec IFX
     | SE '(' expressao ')' comandos SENAO comandos
     | '{' lista_de_comandos '}'
-    | ESCREVA '(' expressao ')' ';' { $$ = no_escreva($3);}
+    | ESCREVA '(' expressao ')' ';'
     | LEIA '(' ID  ')' ';' { $$ = no_leia($3);}
     | RETORNE expressao ';'
     ;
 
 lista_inicializacao_vetor
-    : literal { $$= no_literal($1);}
-    | lista_inicializacao_vetor ',' literal { $$= no_init_vetor($1, $3);}
+    : literal { $$ = $1; }
+    | lista_inicializacao_vetor ',' literal 
+        { $$ = opr(',' , $1, $3, NULL); }
     ;
     
 
 lista_de_comandos
-    : comandos	{ $$= no_comando($1);}
-    | lista_de_comandos comandos { $$= no_lista_comandos($1, $2);}
+    : comandos	{ $$ = $1; }
+    | lista_de_comandos comandos 
+        { $$ = opr(';', $1, $2, NULL); }
     ;
     
 
 expressao
-    :
-    | '(' expressao ')' { $$= no_exp($2);}
-    | expressao '+' expressao { $$= no_exp_adicao($1, $3);}
-    | expressao '-' expressao { $$= no_exp_subtracao($1, $3);}
-    | expressao '*' expressao { $$= no_exp_multiplicacao($1, $3);}
-    | expressao '/' expressao { $$= no_exp_diferenca($1, $3);}
-    | expressao '%' expressao { $$= no_exp_mod($1, $3);}
-    | expressao '>' expressao { $$= no_exp_maior($1, $3);}
-    | expressao '<' expressao { $$= no_exp_menor($1, $3);}
-    | expressao GE expressao { $$= no_exp_GE($1, $3);}
-    | expressao LE expressao { $$= no_exp_LE($1, $3);}
-    | expressao IGUAL expressao { $$= no_exp_igual($1, $3);}
-    | expressao DIFERENTE expressao { $$= no_exp_diferente($1, $3);}
-    | expressao AND expressao { $$= no_exp_e_logico($1, $3);}
-    | expressao OR expressao { $$= no_exp_ou_logico($1, $3);}
-    | expressao IMPLICA expressao { $$= no_exp_implica($1, $3);}
-    | expressao BIIMPLICA expressao { $$= no_exp_biimplica($1, $3);}
-	| expressao_de_cast { $$= no_exp_cast($1);}
-	| expressao_posfixa { $$= no_exp_posfixa($1);}
-	| '+' expressao { $$= no_exp_unaria1($2);} //verificar isso
-	| '-' expressao { $$= no_exp_unaria2($2);} //verificar isso
-	| '!' expressao { $$= no_exp_unaria3($2);} //verificar isso
-	| literal { $$= no_literal($1);}
-	| ID chamada_de_funcao { $$= no_chamada_funcao($2);}
-    | expressao_atribuicao { $$= no_exp_atribuicao($1);}
+    : expressao_atribuicao { $$ = $1; }
     ;
 
 expressao_atribuicao
-    : expressao_unaria operador_atribuicao expressao_atribuicao { $$= no_exp_tipo1($1, $2, $3);}
+    : expressao_biimplica 
+        { $$ = $1; }
+    | expressao_unaria '=' expressao_atribuicao 
+        { $$ = opr('=', $1, $3, NULL); }
+    ;
+
+
+expressao_biimplica
+    : expressao_implica 
+        { $$ = $1; }
+    | expressao_biimplica BIIMPLICA expressao_implica 
+        { $$ = opr(AST_BIIMPLICA, $1, $3, NULL); } 
+    ;
+
+expressao_implica
+    : expressao_condicional { $$ = $1; }
+    | expressao_implica IMPLICA expressao_condicional 
+        { $$ = opr(AST_IMPLICA, $1, $3, NULL); } 
+    ;
+    
+expressao_condicional
+    : expressao_ou_logico { $$ = $1; }
+    ;
+
+expressao_ou_logico
+    : expressao_e_logico { $$ = $1; }
+    | expressao_ou_logico OR expressao_e_logico 
+        { $$ = opr(AST_DISJUNCAO, $1, $3, NULL); }
+    ;
+
+expressao_e_logico
+    : expressao_igualdade { $$ = $1; }
+    | expressao_e_logico AND expressao_igualdade 
+        { $$ = opr(AST_CONJUNCAO, $1, $3, NULL); }
+    ;
+
+expressao_igualdade
+    : expressao_relacional 
+        { $$ = $1; }
+    | expressao_igualdade IGUAL expressao_relacional 
+        { $$ = opr(AST_IGUAL, $1, $3, NULL);}
+    | expressao_igualdade DIFERENTE expressao_relacional 
+        { $$ = opr(AST_DIFERENTE, $1, $3, NULL);}
+    ;
+
+expressao_relacional
+    : expressao_aditiva { $$ = $1; }
+    | expressao_relacional '<' expressao_aditiva 
+        { $$ = opr('<', $1, $3, NULL); }
+    | expressao_relacional '>' expressao_aditiva 
+        { $$ = opr('>', $1, $3, NULL); }
+    | expressao_relacional GE expressao_aditiva 
+        { $$ = opr(AST_GE, $1, $3, NULL); }
+    | expressao_relacional LE expressao_aditiva 
+        { $$ = opr(AST_LE, $1, $3, NULL);}
+    ;
+
+expressao_aditiva
+    : expressao_multiplicativa { $$ = $1; }
+    | expressao_aditiva '+' expressao_multiplicativa 
+        { $$ = opr('+', $1, $3, NULL); }
+    | expressao_aditiva '-' expressao_multiplicativa 
+        { $$ = opr('-', $1, $3, NULL); }
+    ;
+
+
+expressao_multiplicativa
+    : expressao_de_cast { $$ = $1; }
+    | expressao_multiplicativa '*' expressao_de_cast 
+        { $$ = opr('*', $1, $3, NULL); }
+    | expressao_multiplicativa '/' expressao_de_cast 
+        { $$ = opr('/', $1, $3, NULL); }
+    | expressao_multiplicativa '%' expressao_de_cast 
+        { $$ = opr('%', $1, $3, NULL); }
     ;
 
 expressao_de_cast
-    : expressao_unaria { $$= no_exp_unaria($1);}
-    ; 
+    : expressao_unaria { $$ = $1; }
+    ;
 
-
+expressao_unaria
+    : expressao_posfixa { $$ = $1; }
+    | '+' expressao_de_cast { $$ = $2; }
+    | '-' expressao_de_cast { $$ = opr(AST_UMINUS, $2, NULL, NULL); }
+    | '!' expressao_de_cast { $$ = opr('!', $2, NULL, NULL); }
+    ;
 
 expressao_posfixa
-    : expressao_primaria { $$= no_exp_primaria($1);}
+    : expressao_primaria { $$ = $1; }
     ;
 
 expressao_primaria
-    : literal { $$= no_literal($1);}
-    | ID chamada_de_funcao { $$= no_chamada_funcao($2);}
-    | '(' expressao ')' { $$= no_exp($2);}
+    : literal { $$ = $1; }
+    | ID chamada_funcao { $$ = no_chamada_funcao($1, $2);}
+    | '(' expressao ')' { $$ = $2; }
     ;
- 
-chamada_de_funcao
-    : 
-    | '(' lista_expressoes ')' { $$= no_lista_exp($2);}
+
+chamada_funcao
+    : { $$ = NULL; }
+    | '(' lista_expressoes ')' { $$ = $2; }
     ;
 
 lista_expressoes
-    : 
-    | expressao { $$= no_exp($1);}
-    | lista_expressoes ',' expressao { $$= no_exp_tipo19($1, $3);}
+    : { $$ = NULL; }
+    | expressao { $$ = $1; }
+    | lista_expressoes ',' expressao { $$ = opr(',', $1, $3, NULL); }
     ;
 
 literal
-    : INTEIRO { $$= no_int($1);}
-    | STRING  { $$= no_string($1);}
-    | CHAR { $$= no_char($1);}
-    | FLOAT { $$= no_gloat($1);}
-    | VERDADEIRO { $$= no_true($1);}
-    | FALSO { $$= no_false($1);}
+    : INTEIRO    { $$ = lit(AST_INTEIRO, $1);}
+    | STRING     { $$ = lit(AST_STRING, $1);}
+    | CHAR       { $$ = lit(AST_CHAR, $1);}
+    | FLOAT      { $$ = lit(AST_FLOAT, $1);}
+    | VERDADEIRO { $$ = lit(AST_VERDADEIRO, NULL);}
+    | FALSO      { $$ = lit(AST_FALSO, NULL); }
     ;
 
-operador_atribuicao
-    : '=' { $$= no_atribuicao($1);}
-    ;
 
 
 %%

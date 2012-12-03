@@ -13,13 +13,19 @@
 
 enum CTipo {
     /* declaracao da main, funcoes e procedimentos */
-    AST_DECL_FUN,
+    AST_DECL_FUN = 500,
     AST_DECL_PROC,
     AST_DECL_MAIN,
 
     /* identificadores e literais */
     AST_ID,
     AST_LITERAL,
+    AST_INTEIRO,
+    AST_STRING,
+    AST_CHAR,
+    AST_FLOAT,
+    AST_VERDADEIRO,
+    AST_FALSO,
 
     /* Lacos e testes condicionais */
     AST_WHILE,
@@ -31,8 +37,10 @@ enum CTipo {
     /* Entrada e saida */
     AST_ESCREVA,
     AST_LEIA,
+    AST_FCHAMADA,
  
     /* Operacoes aritmeticas*/
+    AST_UMINUS,
     AST_SOMA,
     AST_SUBTRACAO,
     AST_MULTIPLICACAO,
@@ -51,9 +59,9 @@ enum CTipo {
 
     /* Comparacoes */
     AST_MENOR,
-    AST_MENOR_IGUAL,
+    AST_LE,
     AST_MAIOR,
-    AST_MAIOR_IGUAL,
+    AST_GE,
     AST_IGUAL,
     AST_DIFERENTE,
     
@@ -70,259 +78,50 @@ enum CTipo {
 /* Estrutura do ASTNode */
 struct ASTNode{
     struct Tipo* tipo;
-    char* valor;
+    char valor[255];
     struct ASTNode* filho1;
     struct ASTNode* filho2;
     struct ASTNode* filho3;
-    enum CTipo ctipo;
+    enum CTipo op;
 };
 
-
-
-struct ASTNode* no_tipo(enum CTipo ctipo) {
+struct ASTNode* 
+opr(int op, struct ASTNode* p1, struct ASTNode* p2, struct ASTNode* p3) {
     struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = ctipo;
+
+    tmp->op = op;
+    tmp->filho1 = p1;
+    tmp->filho2 = p2;
+    tmp->filho3 = p3;
+
     return tmp;
 }
 
-struct ASTNode* no_programa(struct ASTNode* ptr1, struct ASTNode* ptr2) {
+struct ASTNode* lit(int op, char* id) {
     struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_DECL_MAIN;
-    tmp->filho1 = ptr1;
-    tmp->filho2 = ptr2;
-    return tmp;
-}
 
-struct ASTNode* no_enquanto(struct ASTNode* exp, struct ASTNode* corpo) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_WHILE;
-    tmp->filho1 = exp;
-    tmp->filho2 = corpo;
-    return tmp;
-}
-
-struct ASTNode* no_para() {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_WHILE;
+    tmp->op = op;
     tmp->filho1 = NULL;
     tmp->filho2 = NULL;
+    tmp->filho3 = NULL;
+    strcpy(tmp->valor, id);
+
     return tmp;
+   
 }
 
-struct ASTNode* no_faca_enquanto(struct ASTNode* exp, struct ASTNode* corpo) {
+struct ASTNode*
+no_chamada_funcao(char* id, struct ASTNode* args) {
     struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_WHILE;
-    tmp->filho1 = exp;
-    tmp->filho2 = corpo;
-    return tmp;
-}
 
-struct ASTNode* no_literal(struct ASTNode* literal) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_LITERAL;
-    tmp->filho1 = exp;
+    tmp->op = AST_FCHAMADA;
+    tmp->filho1 = args;
     tmp->filho2 = NULL;
-    return tmp;
-}
+    tmp->filho3 = NULL;
+    strcpy(tmp->valor, id);
 
-struct ASTNode* no_literal(struct ASTNode* literal) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_LITERAL;
-    tmp->filho1 = exp;
-    tmp->filho2 = NULL;
     return tmp;
-}
 
-struct ASTNode* no_leia(struct ASTNode* var) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_LEIA;
-    tmp->filho1 = var;
-    tmp->filho2 = NULL;
-    return tmp;
-}
-
-struct ASTNode* no_escreva(struct ASTNode* var) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_ESCREVA;
-    tmp->filho1 = var;
-    tmp->filho2 = NULL;
-    return tmp;
-}
-
-struct ASTNode* no_init_vetor(struct ASTNode* cauda, struct ASTNode* cabeca) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_VETOR;
-    tmp->filho1 = cauda;
-    tmp->filho2 = cabeca;
-    return tmp;
-}
-
-struct ASTNode* no_comando(struct ASTNode* cmd) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_COMANDO;
-    tmp->filho1 = cmd;
-    tmp->filho2 = NULL;
-    return tmp;
-}
-
-struct ASTNode* no_lista_comandos(struct ASTNode* lista, struct ASTNode* cmd) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_LISTA_COMANDOS;
-    tmp->filho1 = lista;
-    tmp->filho2 = cmd;
-    return tmp;
-}
-
-struct ASTNode* no_exp_adicao(struct ASTNode* exp1, struct ASTNode* exp2) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_SOMA;
-    tmp->filho1 = exp1;
-    tmp->filho2 = exp2;
-    return tmp;
-}
-
-struct ASTNode* no_exp_subtracao(struct ASTNode* exp1, struct ASTNode* exp2) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_SUBTRACAO;
-    tmp->filho1 = exp1;
-    tmp->filho2 = exp2;
-    return tmp;
-}
-struct ASTNode* no_exp_multiplicacao(struct ASTNode* exp1, struct ASTNode* exp2) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_MULTIPLICACAO;
-    tmp->filho1 = exp1;
-    tmp->filho2 = exp2;
-    return tmp;
-}
-
-struct ASTNode* no_exp_diferenca(struct ASTNode* exp1, struct ASTNode* exp2) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_DIFERENCA;
-    tmp->filho1 = exp1;
-    tmp->filho2 = exp2;
-    return tmp;
-}
-
-struct ASTNode* no_exp_mod(struct ASTNode* exp1, struct ASTNode* exp2) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_MOD;
-    tmp->filho1 = exp1;
-    tmp->filho2 = exp2;
-    return tmp;
-}
-
-struct ASTNode* no_exp_maior(struct ASTNode* exp1, struct ASTNode* exp2) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_MAIOR;
-    tmp->filho1 = exp1;
-    tmp->filho2 = exp2;
-    return tmp;
-}
-
-struct ASTNode* no_exp_menor(struct ASTNode* exp1, struct ASTNode* exp2) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_MENOR;
-    tmp->filho1 = exp1;
-    tmp->filho2 = exp2;
-    return tmp;
-}
-
-struct ASTNode* no_exp_GE(struct ASTNode* exp1, struct ASTNode* exp2) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_MAIOR_IGUAL;
-    tmp->filho1 = exp1;
-    tmp->filho2 = exp2;
-    return tmp;
-}
-
-struct ASTNode* no_exp_LE(struct ASTNode* exp1, struct ASTNode* exp2) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_MENOR_IGUAL;
-    tmp->filho1 = exp1;
-    tmp->filho2 = exp2;
-    return tmp;
-}
-
-
-struct ASTNode* no_exp_igual(struct ASTNode* exp1, struct ASTNode* exp2) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_IGUAL;
-    tmp->filho1 = exp1;
-    tmp->filho2 = exp2;
-    return tmp;
-}
-
-struct ASTNode* no_exp_diferente(struct ASTNode* exp1, struct ASTNode* exp2) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_DIFERENTE;
-    tmp->filho1 = exp1;
-    tmp->filho2 = exp2;
-    return tmp;
-}
-
-struct ASTNode* no_exp_e_logico(struct ASTNode* exp1, struct ASTNode* exp2) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_CONJUNCAO;
-    tmp->filho1 = exp1;
-    tmp->filho2 = exp2;
-    return tmp;
-}
-
-struct ASTNode* no_exp_ou_logico(struct ASTNode* exp1, struct ASTNode* exp2) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_DISJUNCAO;
-    tmp->filho1 = exp1;
-    tmp->filho2 = exp2;
-    return tmp;
-}
-
-struct ASTNode* no_exp_implica(struct ASTNode* exp1, struct ASTNode* exp2) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_IMPLICA;
-    tmp->filho1 = exp1;
-    tmp->filho2 = exp2;
-    return tmp;
-}
-
-struct ASTNode* no_exp_biimplica(struct ASTNode* exp1, struct ASTNode* exp2) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_BIIMPLICA;
-    tmp->filho1 = exp1;
-    tmp->filho2 = exp2;
-    return tmp;
-}
-
-struct ASTNode* no_exp_cast(struct ASTNode* exp1) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_CAST;
-    tmp->filho1 = exp1;
-    tmp->filho2 = NULL;
-    return tmp;
-}
-
-struct ASTNode* no_exp_unaria1(struct ASTNode* exp1) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_UNARIA1;
-    tmp->filho1 = exp1;
-    tmp->filho2 = NULL;
-    return tmp;
-}
-
-struct ASTNode* no_exp_unaria2(struct ASTNode* exp1) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_UNARIA2;
-    tmp->filho1 = exp1;
-    tmp->filho2 = NULL;
-    return tmp;
-}
-
-struct ASTNode* no_exp_unaria3(struct ASTNode* exp1) {
-    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
-    tmp->ctipo = AST_UNARIA3;
-    tmp->filho1 = exp1;
-    tmp->filho2 = NULL;
-    return tmp;
 }
 
 void liberar(struct ASTNode* ptr) {
@@ -439,7 +238,7 @@ void gerar_codigo(struct ASTNode* ptr) {
         return;
     }
     
-    switch (ptr->ctipo) {
+    switch (ptr->op) {
         case AST_DECL_MAIN:
             printf("#include <stdio.h>\n");
             gerar_codigo(ptr->filho1);
@@ -495,7 +294,7 @@ void gerar_codigo(struct ASTNode* ptr) {
             gerar_codigo(ptr->filho2);            
             break;
 
-        case AST_MENOR_IGUAL:    //alterações 02/12
+        case AST_LE:    //alterações 02/12
             gerar_codigo(ptr->filho1);
             printf("<=");
             gerar_codigo(ptr->filho2);            
@@ -507,7 +306,7 @@ void gerar_codigo(struct ASTNode* ptr) {
             gerar_codigo(ptr->filho2);            
             break;
 
-        case AST_MAIOR_IGUAL:    //alterações 02/12
+        case AST_GE:    //alterações 02/12
             gerar_codigo(ptr->filho1);
             printf(">=");
             gerar_codigo(ptr->filho2);            
@@ -564,7 +363,35 @@ void gerar_codigo(struct ASTNode* ptr) {
             gerar_codigo(ptr->filho1);
             printf("] = ");
             gerar_codigo(ptr->filho2);
-            
+          
+        /* Chamada de funcao */
+        case AST_FCHAMADA:
+            printf("%s(", ptr->valor);
+            gerar_codigo(ptr->filho1);
+            printf(")");
+            break;
+
+        /* Tipos */
+        case AST_TIPO_BOOLEANO:
+            printf("int ");
+            break;
+
+        case AST_TIPO_FLOAT:
+            printf("float ");
+            break;
+
+        case AST_TIPO_CHAR:
+            printf("char ");
+            break;
+
+        case AST_TIPO_STRING:
+            printf("char* ");
+            break;
+
+        case AST_TIPO_INTEIRO:
+            printf("int ");
+            break;
+ 
         default:
             printf("ERRO!\n");
             break;
