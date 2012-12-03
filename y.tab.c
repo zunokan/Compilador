@@ -534,15 +534,15 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    70,    70,    76,    85,    86,    87,    88,    89,    93,
-      94,    98,    99,   103,   107,   110,   112,   113,   117,   118,
-     123,   124,   125,   126,   127,   129,   131,   133,   135,   137,
-     139,   141,   143,   145,   150,   151,   157,   158,   164,   168,
-     170,   176,   178,   183,   184,   189,   193,   194,   199,   200,
-     205,   207,   209,   214,   215,   217,   219,   221,   226,   227,
-     229,   235,   236,   238,   240,   245,   249,   250,   251,   252,
-     256,   260,   261,   262,   266,   267,   271,   272,   273,   277,
-     278,   279,   280,   281,   282
+       0,    70,    70,    75,    83,    84,    85,    86,    87,    91,
+      92,    96,    97,   101,   105,   108,   110,   111,   115,   116,
+     121,   122,   123,   124,   125,   127,   129,   131,   133,   135,
+     137,   139,   141,   143,   148,   149,   155,   156,   162,   166,
+     168,   174,   176,   181,   182,   187,   191,   192,   197,   198,
+     203,   205,   207,   212,   213,   215,   217,   219,   224,   225,
+     227,   233,   234,   236,   238,   243,   247,   248,   249,   250,
+     254,   258,   259,   260,   264,   265,   269,   270,   271,   275,
+     276,   277,   278,   279,   280
 };
 #endif
 
@@ -1610,571 +1610,569 @@ yyreduce:
     { struct ASTNode* prog = opr(AST_DECL_MAIN, (yyvsp[(1) - (5)].ptr), (yyvsp[(4) - (5)].ptr), NULL);
           gerar_codigo(prog);
           liberar(prog);
-          printf("sucesso\n");
         }
     break;
 
   case 3:
 
 /* Line 1806 of yacc.c  */
-#line 77 "yacc.y"
+#line 76 "yacc.y"
     { struct ASTNode* prog = opr(AST_DECL_MAIN, NULL, (yyvsp[(3) - (4)].ptr), NULL);
           gerar_codigo(prog);
           liberar(prog);
-          printf("sucesso\n");
         }
     break;
 
   case 4:
 
 /* Line 1806 of yacc.c  */
-#line 85 "yacc.y"
+#line 83 "yacc.y"
     { (yyval.ptr) = opr(AST_TIPO_BOOLEANO, NULL, NULL, NULL); }
     break;
 
   case 5:
 
 /* Line 1806 of yacc.c  */
-#line 86 "yacc.y"
+#line 84 "yacc.y"
     { (yyval.ptr) = opr(AST_TIPO_FLOAT, NULL, NULL, NULL); }
     break;
 
   case 6:
 
 /* Line 1806 of yacc.c  */
-#line 87 "yacc.y"
+#line 85 "yacc.y"
     { (yyval.ptr) = opr(AST_TIPO_CHAR, NULL, NULL, NULL); }
     break;
 
   case 7:
 
 /* Line 1806 of yacc.c  */
-#line 88 "yacc.y"
+#line 86 "yacc.y"
     { (yyval.ptr) = opr(AST_TIPO_STRING, NULL, NULL, NULL); }
     break;
 
   case 8:
 
 /* Line 1806 of yacc.c  */
-#line 89 "yacc.y"
+#line 87 "yacc.y"
     { (yyval.ptr) = opr(AST_TIPO_INTEIRO, NULL, NULL, NULL); }
     break;
 
   case 9:
 
 /* Line 1806 of yacc.c  */
-#line 93 "yacc.y"
+#line 91 "yacc.y"
     { (yyval.ptr) = (yyvsp[(1) - (1)].ptr); }
     break;
 
   case 10:
 
 /* Line 1806 of yacc.c  */
-#line 94 "yacc.y"
+#line 92 "yacc.y"
     { (yyval.ptr) = opr('@', (yyvsp[(1) - (2)].ptr), (yyvsp[(2) - (2)].ptr), NULL); }
     break;
 
   case 11:
 
 /* Line 1806 of yacc.c  */
-#line 98 "yacc.y"
+#line 96 "yacc.y"
     { (yyval.ptr) = (yyvsp[(1) - (1)].ptr); }
     break;
 
   case 12:
 
 /* Line 1806 of yacc.c  */
-#line 99 "yacc.y"
+#line 97 "yacc.y"
     { (yyval.ptr) = (yyvsp[(1) - (1)].ptr); }
     break;
 
   case 13:
 
 /* Line 1806 of yacc.c  */
-#line 103 "yacc.y"
+#line 101 "yacc.y"
     { (yyval.ptr) = NULL; }
     break;
 
   case 14:
 
 /* Line 1806 of yacc.c  */
-#line 107 "yacc.y"
+#line 105 "yacc.y"
     { (yyval.ptr) = NULL; }
     break;
 
   case 18:
 
 /* Line 1806 of yacc.c  */
-#line 117 "yacc.y"
+#line 115 "yacc.y"
     { (yyval.ptr) = NULL; }
     break;
 
   case 19:
 
 /* Line 1806 of yacc.c  */
-#line 118 "yacc.y"
+#line 116 "yacc.y"
     { (yyval.ptr) = opr(';', (yyvsp[(1) - (2)].ptr), (yyvsp[(2) - (2)].ptr), NULL); }
     break;
 
   case 20:
 
 /* Line 1806 of yacc.c  */
-#line 123 "yacc.y"
+#line 121 "yacc.y"
     { (yyval.ptr) = opr(';', NULL, NULL, NULL); }
     break;
 
   case 21:
 
 /* Line 1806 of yacc.c  */
-#line 124 "yacc.y"
-    { (yyval.ptr) = NULL; }
+#line 122 "yacc.y"
+    { (yyval.ptr) = opr(AST_TIPO1, (yyvsp[(1) - (3)].ptr), lit(AST_ID, (yyvsp[(2) - (3)].valor)), NULL); }
     break;
 
   case 22:
 
 /* Line 1806 of yacc.c  */
-#line 125 "yacc.y"
-    { (yyval.ptr) = NULL; }
+#line 123 "yacc.y"
+    { (yyval.ptr) = opr(AST_TIPO2, (yyvsp[(1) - (5)].ptr), lit(AST_ID, (yyvsp[(2) - (5)].valor)), (yyvsp[(4) - (5)].ptr)); }
     break;
 
   case 23:
+
+/* Line 1806 of yacc.c  */
+#line 124 "yacc.y"
+    { (yyval.ptr) = opr(AST_TIPO3, (yyvsp[(1) - (6)].ptr), lit(AST_ID, (yyvsp[(2) - (6)].valor)), lit(AST_INTEIRO, (yyvsp[(4) - (6)].valor))); }
+    break;
+
+  case 24:
 
 /* Line 1806 of yacc.c  */
 #line 126 "yacc.y"
     { (yyval.ptr) = NULL; }
     break;
 
-  case 24:
-
-/* Line 1806 of yacc.c  */
-#line 128 "yacc.y"
-    { (yyval.ptr) = NULL; }
-    break;
-
   case 25:
 
 /* Line 1806 of yacc.c  */
-#line 130 "yacc.y"
+#line 128 "yacc.y"
     { (yyval.ptr) = (yyvsp[(1) - (2)].ptr); }
     break;
 
   case 26:
 
 /* Line 1806 of yacc.c  */
-#line 132 "yacc.y"
+#line 130 "yacc.y"
     { (yyval.ptr) = opr(AST_WHILE, (yyvsp[(3) - (5)].ptr), (yyvsp[(5) - (5)].ptr), NULL); }
     break;
 
   case 27:
 
 /* Line 1806 of yacc.c  */
-#line 134 "yacc.y"
+#line 132 "yacc.y"
     { (yyval.ptr) = opr(AST_DO_WHILE, (yyvsp[(2) - (7)].ptr), (yyvsp[(5) - (7)].ptr), NULL); }
     break;
 
   case 28:
 
 /* Line 1806 of yacc.c  */
-#line 136 "yacc.y"
+#line 134 "yacc.y"
     { (yyval.ptr) = opr(AST_IF, (yyvsp[(3) - (5)].ptr), (yyvsp[(5) - (5)].ptr), NULL); }
     break;
 
   case 29:
 
 /* Line 1806 of yacc.c  */
-#line 138 "yacc.y"
+#line 136 "yacc.y"
     { (yyval.ptr) = opr(AST_IF, (yyvsp[(3) - (7)].ptr), (yyvsp[(5) - (7)].ptr), (yyvsp[(7) - (7)].ptr)); }
     break;
 
   case 30:
 
 /* Line 1806 of yacc.c  */
-#line 140 "yacc.y"
+#line 138 "yacc.y"
     { (yyval.ptr) = (yyvsp[(2) - (3)].ptr); }
     break;
 
   case 31:
 
 /* Line 1806 of yacc.c  */
-#line 142 "yacc.y"
+#line 140 "yacc.y"
     { (yyval.ptr) = opr(AST_ESCREVA, (yyvsp[(3) - (5)].ptr), NULL, NULL); }
     break;
 
   case 32:
 
 /* Line 1806 of yacc.c  */
-#line 144 "yacc.y"
+#line 142 "yacc.y"
     { (yyval.ptr) = opr(AST_LEIA, lit(AST_ID, (yyvsp[(3) - (5)].valor)), NULL, NULL); }
     break;
 
   case 33:
 
 /* Line 1806 of yacc.c  */
-#line 146 "yacc.y"
+#line 144 "yacc.y"
     { (yyval.ptr) = opr(AST_RETORNE, (yyvsp[(2) - (3)].ptr), NULL, NULL); }
     break;
 
   case 34:
 
 /* Line 1806 of yacc.c  */
-#line 150 "yacc.y"
+#line 148 "yacc.y"
     { (yyval.ptr) = (yyvsp[(1) - (1)].ptr); }
     break;
 
   case 35:
 
 /* Line 1806 of yacc.c  */
-#line 152 "yacc.y"
+#line 150 "yacc.y"
     { (yyval.ptr) = opr(',' , (yyvsp[(1) - (3)].ptr), (yyvsp[(3) - (3)].ptr), NULL); }
     break;
 
   case 36:
 
 /* Line 1806 of yacc.c  */
-#line 157 "yacc.y"
+#line 155 "yacc.y"
     { (yyval.ptr) = (yyvsp[(1) - (1)].ptr); }
     break;
 
   case 37:
 
 /* Line 1806 of yacc.c  */
-#line 159 "yacc.y"
+#line 157 "yacc.y"
     { (yyval.ptr) = opr(';', (yyvsp[(1) - (2)].ptr), (yyvsp[(2) - (2)].ptr), NULL); }
     break;
 
   case 38:
 
 /* Line 1806 of yacc.c  */
-#line 164 "yacc.y"
+#line 162 "yacc.y"
     { (yyval.ptr) = (yyvsp[(1) - (1)].ptr); }
     break;
 
   case 39:
 
 /* Line 1806 of yacc.c  */
-#line 169 "yacc.y"
+#line 167 "yacc.y"
     { (yyval.ptr) = (yyvsp[(1) - (1)].ptr); }
     break;
 
   case 40:
 
 /* Line 1806 of yacc.c  */
-#line 171 "yacc.y"
+#line 169 "yacc.y"
     { (yyval.ptr) = opr('=', (yyvsp[(1) - (3)].ptr), (yyvsp[(3) - (3)].ptr), NULL); }
     break;
 
   case 41:
 
 /* Line 1806 of yacc.c  */
-#line 177 "yacc.y"
+#line 175 "yacc.y"
     { (yyval.ptr) = (yyvsp[(1) - (1)].ptr); }
     break;
 
   case 42:
 
 /* Line 1806 of yacc.c  */
-#line 179 "yacc.y"
+#line 177 "yacc.y"
     { (yyval.ptr) = opr(AST_BIIMPLICA, (yyvsp[(1) - (3)].ptr), (yyvsp[(3) - (3)].ptr), NULL); }
     break;
 
   case 43:
 
 /* Line 1806 of yacc.c  */
-#line 183 "yacc.y"
+#line 181 "yacc.y"
     { (yyval.ptr) = (yyvsp[(1) - (1)].ptr); }
     break;
 
   case 44:
 
 /* Line 1806 of yacc.c  */
-#line 185 "yacc.y"
+#line 183 "yacc.y"
     { (yyval.ptr) = opr(AST_IMPLICA, (yyvsp[(1) - (3)].ptr), (yyvsp[(3) - (3)].ptr), NULL); }
     break;
 
   case 45:
 
 /* Line 1806 of yacc.c  */
-#line 189 "yacc.y"
+#line 187 "yacc.y"
     { (yyval.ptr) = (yyvsp[(1) - (1)].ptr); }
     break;
 
   case 46:
 
 /* Line 1806 of yacc.c  */
-#line 193 "yacc.y"
+#line 191 "yacc.y"
     { (yyval.ptr) = (yyvsp[(1) - (1)].ptr); }
     break;
 
   case 47:
 
 /* Line 1806 of yacc.c  */
-#line 195 "yacc.y"
+#line 193 "yacc.y"
     { (yyval.ptr) = opr(AST_DISJUNCAO, (yyvsp[(1) - (3)].ptr), (yyvsp[(3) - (3)].ptr), NULL); }
     break;
 
   case 48:
 
 /* Line 1806 of yacc.c  */
-#line 199 "yacc.y"
+#line 197 "yacc.y"
     { (yyval.ptr) = (yyvsp[(1) - (1)].ptr); }
     break;
 
   case 49:
 
 /* Line 1806 of yacc.c  */
-#line 201 "yacc.y"
+#line 199 "yacc.y"
     { (yyval.ptr) = opr(AST_CONJUNCAO, (yyvsp[(1) - (3)].ptr), (yyvsp[(3) - (3)].ptr), NULL); }
     break;
 
   case 50:
 
 /* Line 1806 of yacc.c  */
-#line 206 "yacc.y"
+#line 204 "yacc.y"
     { (yyval.ptr) = (yyvsp[(1) - (1)].ptr); }
     break;
 
   case 51:
 
 /* Line 1806 of yacc.c  */
-#line 208 "yacc.y"
+#line 206 "yacc.y"
     { (yyval.ptr) = opr(AST_IGUAL, (yyvsp[(1) - (3)].ptr), (yyvsp[(3) - (3)].ptr), NULL);}
     break;
 
   case 52:
 
 /* Line 1806 of yacc.c  */
-#line 210 "yacc.y"
+#line 208 "yacc.y"
     { (yyval.ptr) = opr(AST_DIFERENTE, (yyvsp[(1) - (3)].ptr), (yyvsp[(3) - (3)].ptr), NULL);}
     break;
 
   case 53:
 
 /* Line 1806 of yacc.c  */
-#line 214 "yacc.y"
+#line 212 "yacc.y"
     { (yyval.ptr) = (yyvsp[(1) - (1)].ptr); }
     break;
 
   case 54:
 
 /* Line 1806 of yacc.c  */
-#line 216 "yacc.y"
+#line 214 "yacc.y"
     { (yyval.ptr) = opr('<', (yyvsp[(1) - (3)].ptr), (yyvsp[(3) - (3)].ptr), NULL); }
     break;
 
   case 55:
 
 /* Line 1806 of yacc.c  */
-#line 218 "yacc.y"
+#line 216 "yacc.y"
     { (yyval.ptr) = opr('>', (yyvsp[(1) - (3)].ptr), (yyvsp[(3) - (3)].ptr), NULL); }
     break;
 
   case 56:
 
 /* Line 1806 of yacc.c  */
-#line 220 "yacc.y"
+#line 218 "yacc.y"
     { (yyval.ptr) = opr(AST_GE, (yyvsp[(1) - (3)].ptr), (yyvsp[(3) - (3)].ptr), NULL); }
     break;
 
   case 57:
 
 /* Line 1806 of yacc.c  */
-#line 222 "yacc.y"
+#line 220 "yacc.y"
     { (yyval.ptr) = opr(AST_LE, (yyvsp[(1) - (3)].ptr), (yyvsp[(3) - (3)].ptr), NULL);}
     break;
 
   case 58:
 
 /* Line 1806 of yacc.c  */
-#line 226 "yacc.y"
+#line 224 "yacc.y"
     { (yyval.ptr) = (yyvsp[(1) - (1)].ptr); }
     break;
 
   case 59:
 
 /* Line 1806 of yacc.c  */
-#line 228 "yacc.y"
+#line 226 "yacc.y"
     { (yyval.ptr) = opr('+', (yyvsp[(1) - (3)].ptr), (yyvsp[(3) - (3)].ptr), NULL); }
     break;
 
   case 60:
 
 /* Line 1806 of yacc.c  */
-#line 230 "yacc.y"
+#line 228 "yacc.y"
     { (yyval.ptr) = opr('-', (yyvsp[(1) - (3)].ptr), (yyvsp[(3) - (3)].ptr), NULL); }
     break;
 
   case 61:
 
 /* Line 1806 of yacc.c  */
-#line 235 "yacc.y"
+#line 233 "yacc.y"
     { (yyval.ptr) = (yyvsp[(1) - (1)].ptr); }
     break;
 
   case 62:
 
 /* Line 1806 of yacc.c  */
-#line 237 "yacc.y"
+#line 235 "yacc.y"
     { (yyval.ptr) = opr('*', (yyvsp[(1) - (3)].ptr), (yyvsp[(3) - (3)].ptr), NULL); }
     break;
 
   case 63:
 
 /* Line 1806 of yacc.c  */
-#line 239 "yacc.y"
+#line 237 "yacc.y"
     { (yyval.ptr) = opr('/', (yyvsp[(1) - (3)].ptr), (yyvsp[(3) - (3)].ptr), NULL); }
     break;
 
   case 64:
 
 /* Line 1806 of yacc.c  */
-#line 241 "yacc.y"
+#line 239 "yacc.y"
     { (yyval.ptr) = opr('%', (yyvsp[(1) - (3)].ptr), (yyvsp[(3) - (3)].ptr), NULL); }
     break;
 
   case 65:
 
 /* Line 1806 of yacc.c  */
-#line 245 "yacc.y"
+#line 243 "yacc.y"
     { (yyval.ptr) = (yyvsp[(1) - (1)].ptr); }
     break;
 
   case 66:
 
 /* Line 1806 of yacc.c  */
-#line 249 "yacc.y"
+#line 247 "yacc.y"
     { (yyval.ptr) = (yyvsp[(1) - (1)].ptr); }
     break;
 
   case 67:
 
 /* Line 1806 of yacc.c  */
-#line 250 "yacc.y"
+#line 248 "yacc.y"
     { (yyval.ptr) = (yyvsp[(2) - (2)].ptr); }
     break;
 
   case 68:
 
 /* Line 1806 of yacc.c  */
-#line 251 "yacc.y"
+#line 249 "yacc.y"
     { (yyval.ptr) = opr(AST_UMINUS, (yyvsp[(2) - (2)].ptr), NULL, NULL); }
     break;
 
   case 69:
 
 /* Line 1806 of yacc.c  */
-#line 252 "yacc.y"
+#line 250 "yacc.y"
     { (yyval.ptr) = opr('!', (yyvsp[(2) - (2)].ptr), NULL, NULL); }
     break;
 
   case 70:
 
 /* Line 1806 of yacc.c  */
-#line 256 "yacc.y"
+#line 254 "yacc.y"
     { (yyval.ptr) = (yyvsp[(1) - (1)].ptr); }
     break;
 
   case 71:
 
 /* Line 1806 of yacc.c  */
-#line 260 "yacc.y"
+#line 258 "yacc.y"
     { (yyval.ptr) = (yyvsp[(1) - (1)].ptr); }
     break;
 
   case 72:
 
 /* Line 1806 of yacc.c  */
-#line 261 "yacc.y"
+#line 259 "yacc.y"
     { (yyval.ptr) = no_chamada_funcao((yyvsp[(1) - (2)].valor), (yyvsp[(2) - (2)].ptr));}
     break;
 
   case 73:
 
 /* Line 1806 of yacc.c  */
-#line 262 "yacc.y"
+#line 260 "yacc.y"
     { (yyval.ptr) = (yyvsp[(2) - (3)].ptr); }
     break;
 
   case 74:
 
 /* Line 1806 of yacc.c  */
-#line 266 "yacc.y"
+#line 264 "yacc.y"
     { (yyval.ptr) = NULL; }
     break;
 
   case 75:
 
 /* Line 1806 of yacc.c  */
-#line 267 "yacc.y"
+#line 265 "yacc.y"
     { (yyval.ptr) = (yyvsp[(2) - (3)].ptr); }
     break;
 
   case 76:
 
 /* Line 1806 of yacc.c  */
-#line 271 "yacc.y"
+#line 269 "yacc.y"
     { (yyval.ptr) = NULL; }
     break;
 
   case 77:
 
 /* Line 1806 of yacc.c  */
-#line 272 "yacc.y"
+#line 270 "yacc.y"
     { (yyval.ptr) = (yyvsp[(1) - (1)].ptr); }
     break;
 
   case 78:
 
 /* Line 1806 of yacc.c  */
-#line 273 "yacc.y"
+#line 271 "yacc.y"
     { (yyval.ptr) = opr(',', (yyvsp[(1) - (3)].ptr), (yyvsp[(3) - (3)].ptr), NULL); }
     break;
 
   case 79:
 
 /* Line 1806 of yacc.c  */
-#line 277 "yacc.y"
+#line 275 "yacc.y"
     { (yyval.ptr) = lit(AST_INTEIRO, (yyvsp[(1) - (1)].valor));}
     break;
 
   case 80:
 
 /* Line 1806 of yacc.c  */
-#line 278 "yacc.y"
+#line 276 "yacc.y"
     { (yyval.ptr) = lit(AST_STRING, (yyvsp[(1) - (1)].valor));}
     break;
 
   case 81:
 
 /* Line 1806 of yacc.c  */
-#line 279 "yacc.y"
+#line 277 "yacc.y"
     { (yyval.ptr) = lit(AST_CHAR, (yyvsp[(1) - (1)].valor));}
     break;
 
   case 82:
 
 /* Line 1806 of yacc.c  */
-#line 280 "yacc.y"
+#line 278 "yacc.y"
     { (yyval.ptr) = lit(AST_FLOAT, (yyvsp[(1) - (1)].valor));}
     break;
 
   case 83:
 
 /* Line 1806 of yacc.c  */
-#line 281 "yacc.y"
+#line 279 "yacc.y"
     { (yyval.ptr) = lit(AST_VERDADEIRO, NULL);}
     break;
 
   case 84:
 
 /* Line 1806 of yacc.c  */
-#line 282 "yacc.y"
+#line 280 "yacc.y"
     { (yyval.ptr) = lit(AST_FALSO, NULL); }
     break;
 
 
 
 /* Line 1806 of yacc.c  */
-#line 2178 "y.tab.c"
+#line 2176 "y.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2405,7 +2403,7 @@ yyreturn:
 
 
 /* Line 2067 of yacc.c  */
-#line 287 "yacc.y"
+#line 285 "yacc.y"
 
 
 void yyerror(char* s) {

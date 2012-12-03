@@ -20,6 +20,9 @@ enum CTipo {
 
     /* identificadores e literais */
     AST_ID,
+	AST_TIPO1,
+	AST_TIPO2,
+	AST_TIPO3,
     AST_LITERAL,
     AST_INTEIRO,
     AST_STRING,
@@ -86,8 +89,7 @@ struct ASTNode{
     enum CTipo op;
 };
 
-struct ASTNode* 
-opr(int op, struct ASTNode* p1, struct ASTNode* p2, struct ASTNode* p3) {
+struct ASTNode* opr(int op, struct ASTNode* p1, struct ASTNode* p2, struct ASTNode* p3) {
     struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
 
     tmp->op = op;
@@ -99,6 +101,21 @@ opr(int op, struct ASTNode* p1, struct ASTNode* p2, struct ASTNode* p3) {
 }
 
 struct ASTNode* lit(int op, char* id) {
+    struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
+
+    tmp->op = op;
+    tmp->filho1 = NULL;
+    tmp->filho2 = NULL;
+    tmp->filho3 = NULL;
+    if (id != NULL) {
+        strcpy(tmp->valor, id);
+    }
+
+    return tmp;
+   
+}
+
+struct ASTNode* declaracao(int op, char* id) {
     struct ASTNode* tmp = malloc(sizeof(struct ASTNode));
 
     tmp->op = op;
@@ -255,13 +272,35 @@ void gerar_codigo(struct ASTNode* ptr) {
             printf("return 0;\n}\n\n");
             break;
 
-        /* Constantes e literais */
+        /*  Literais, Identificadores e declarações de variável */
         case AST_LITERAL:
             printf("%s", ptr->valor);
             break;
 
         case AST_ID:
             printf("%s", ptr->valor);
+            break;
+	
+		case AST_TIPO1:
+            gerar_codigo(ptr->filho1);
+			gerar_codigo(ptr->filho2);
+			printf(";\n");
+            break;
+
+		case AST_TIPO2:
+            gerar_codigo(ptr->filho1);
+			gerar_codigo(ptr->filho2);
+			printf(" = ");
+			gerar_codigo(ptr->filho3);
+			printf(";\n");
+            break;
+
+		case AST_TIPO3:
+            gerar_codigo(ptr->filho1);
+			gerar_codigo(ptr->filho2);
+			printf("[");
+			gerar_codigo(ptr->filho3);
+			printf("];\n");
             break;
 
         /* Lacos e condicoes */
@@ -307,56 +346,56 @@ void gerar_codigo(struct ASTNode* ptr) {
             break;
 
         /* Operacoes aritmeticas */
-        case '+':    //alterações 02/12
+        case '+':    
             gerar_codigo(ptr->filho1);
             printf(" + ");
             gerar_codigo(ptr->filho2);            
             break;
 
-        case '-':    //alterações 02/12
+        case '-':    
             gerar_codigo(ptr->filho1);
             printf(" - ");
             gerar_codigo(ptr->filho2);            
             break;
 
-        case '*':    //alterações 02/12
+        case '*':    
             gerar_codigo(ptr->filho1);
             printf(" * ");
             gerar_codigo(ptr->filho2);            
             break;        
 
-        case '/':    //alterações 02/12
+        case '/':    
             gerar_codigo(ptr->filho1);
             printf(" / ");
             gerar_codigo(ptr->filho2);            
             break;
 
-        case '%':    //alterações 02/12
+        case '%':    
             gerar_codigo(ptr->filho1);
             printf(" %c ", '%');
             gerar_codigo(ptr->filho2);            
             break;
 
         /* Comparacoes */
-        case '<':    //alterações 02/12
+        case '<':    
             gerar_codigo(ptr->filho1);
             printf(" < ");
             gerar_codigo(ptr->filho2);            
             break;
 
-        case AST_LE:    //alterações 02/12
+        case AST_LE:    
             gerar_codigo(ptr->filho1);
             printf(" <= ");
             gerar_codigo(ptr->filho2);            
             break;
 
-        case '>':    //alterações 02/12
+        case '>':    
             gerar_codigo(ptr->filho1);
             printf(" > ");
             gerar_codigo(ptr->filho2);            
             break;
 
-        case AST_GE:    //alterações 02/12
+        case AST_GE:    
             gerar_codigo(ptr->filho1);
             printf(" >= ");
             gerar_codigo(ptr->filho2);            
@@ -416,7 +455,7 @@ void gerar_codigo(struct ASTNode* ptr) {
             gerar_codigo(ptr->filho2);            
             break;
 
-        case AST_VETOR:    //tem que conferir isso aqui ainda...
+        case AST_VETOR:    
             printf("%s[", ptr->valor);
             gerar_codigo(ptr->filho1);
             printf("] = ");
@@ -427,7 +466,14 @@ void gerar_codigo(struct ASTNode* ptr) {
             printf("%s", ptr->valor);
             gerar_codigo(ptr->filho1);
             break;
-
+		/* Leitura e Escrita */
+		case AST_ESCREVA:
+			printf("printf(\"");
+			printf("%c", '%');			
+			printf("s\", ");
+			gerar_codigo(ptr->filho1);
+			printf(")");
+			
         /* Literais */
         case AST_INTEIRO:
         case AST_STRING:
@@ -437,11 +483,11 @@ void gerar_codigo(struct ASTNode* ptr) {
             break;
 
         case AST_VERDADEIRO:
-            printf(" 1 ");
+            printf("1");
             break;
 
         case AST_FALSO:
-            printf(" 0 ");
+            printf("0");
             break;
         /* Tipos */
         case AST_TIPO_BOOLEANO:

@@ -71,13 +71,11 @@ programa_completo
         { struct ASTNode* prog = opr(AST_DECL_MAIN, $1, $4, NULL);
           gerar_codigo(prog);
           liberar(prog);
-          printf("sucesso\n");
         }
     | PROGRAMA '{' programa '}' 
         { struct ASTNode* prog = opr(AST_DECL_MAIN, NULL, $3, NULL);
           gerar_codigo(prog);
           liberar(prog);
-          printf("sucesso\n");
         }
     ;
 
@@ -121,9 +119,9 @@ programa
 
 comandos
     : ';' { $$ = opr(';', NULL, NULL, NULL); }
-    | tipo ID ';' { $$ = NULL; }
-    | tipo ID '=' expressao ';' { $$ = NULL; }
-    | tipo ID '['  INTEIRO ']' ';' { $$ = NULL; }
+    | tipo ID ';' { $$ = opr(AST_TIPO1, $1, lit(AST_ID, $2), NULL); }
+    | tipo ID '=' expressao ';' { $$ = opr(AST_TIPO2, $1, lit(AST_ID, $2), $4); }
+    | tipo ID '['  INTEIRO ']' ';' { $$ = opr(AST_TIPO3, $1, lit(AST_ID, $2), lit(AST_INTEIRO, $4)); }
     | tipo ID '['  INTEIRO ']' '=' '{' lista_inicializacao_vetor '}' ';' 
         { $$ = NULL; }
     | expressao ';'
