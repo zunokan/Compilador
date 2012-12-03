@@ -1713,7 +1713,7 @@ yyreduce:
 
 /* Line 1806 of yacc.c  */
 #line 118 "yacc.y"
-    { (yyval.ptr) = NULL; }
+    { (yyval.ptr) = opr(';', (yyvsp[(1) - (2)].ptr), (yyvsp[(2) - (2)].ptr), NULL); }
     break;
 
   case 20:

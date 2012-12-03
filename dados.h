@@ -240,6 +240,11 @@ void gerar_codigo(struct ASTNode* ptr) {
     }
     
     switch (ptr->op) {
+        case ';':
+            gerar_codigo(ptr->filho1);
+            gerar_codigo(ptr->filho2);
+            break;
+
         case AST_DECL_MAIN:
             printf("#include <stdio.h>\n");
             gerar_codigo(ptr->filho1);
@@ -248,6 +253,7 @@ void gerar_codigo(struct ASTNode* ptr) {
             printf("return 0;\n}\n\n");
             break;
 
+        /* Constantes e literais */
         case AST_LITERAL:
             printf("%s", ptr->valor);
             break;
@@ -256,40 +262,58 @@ void gerar_codigo(struct ASTNode* ptr) {
             printf("%s", ptr->valor);
             break;
 
+        /* Lacos */
         case AST_WHILE:
             printf("L%i:\n", lbl1 = lbl++);
             printf("if (!(");
             gerar_codigo(ptr->filho1);
-            printf(") goto L%i;\n", lbl2 = lbl++);
+            printf(")) goto L%i;\n", lbl2 = lbl++);
             gerar_codigo(ptr->filho2);
             printf("goto L%i;\n", lbl1);
+            printf("\nL%i:\n", lbl2);
             break;
 
-        case AST_SOMA:    //alterações 02/12
+        /* Atribuicao */
+        case '=':
+            gerar_codigo(ptr->filho1);
+            printf(" = ");
+            gerar_codigo(ptr->filho2);
+            printf(";\n");
+            break;
+
+        /* Operacoes aritmeticas */
+        case '+':    //alterações 02/12
             gerar_codigo(ptr->filho1);
             printf("+");
             gerar_codigo(ptr->filho2);            
             break;
 
-        case AST_SUBTRACAO:    //alterações 02/12
+        case '-':    //alterações 02/12
             gerar_codigo(ptr->filho1);
             printf("-");
             gerar_codigo(ptr->filho2);            
             break;
 
-        case AST_MULTIPLICACAO:    //alterações 02/12
+        case '*':    //alterações 02/12
             gerar_codigo(ptr->filho1);
             printf("*");
             gerar_codigo(ptr->filho2);            
             break;        
 
-        case AST_DIFERENCA:    //alterações 02/12
+        case '/':    //alterações 02/12
             gerar_codigo(ptr->filho1);
             printf("/");
             gerar_codigo(ptr->filho2);            
             break;
 
-        case AST_MENOR:    //alterações 02/12
+        case '%':    //alterações 02/12
+            gerar_codigo(ptr->filho1);
+            printf("%c", '%');
+            gerar_codigo(ptr->filho2);            
+            break;
+
+        /* Comparacoes */
+        case '<':    //alterações 02/12
             gerar_codigo(ptr->filho1);
             printf("<");
             gerar_codigo(ptr->filho2);            
@@ -301,7 +325,7 @@ void gerar_codigo(struct ASTNode* ptr) {
             gerar_codigo(ptr->filho2);            
             break;
 
-        case AST_MAIOR:    //alterações 02/12
+        case '>':    //alterações 02/12
             gerar_codigo(ptr->filho1);
             printf(">");
             gerar_codigo(ptr->filho2);            
@@ -313,12 +337,8 @@ void gerar_codigo(struct ASTNode* ptr) {
             gerar_codigo(ptr->filho2);            
             break;        
 
-        case AST_MOD:    //alterações 02/12
-            gerar_codigo(ptr->filho1);
-            printf("%c", '%');
-            gerar_codigo(ptr->filho2);            
-            break;
 
+        /* Operadores logicos */
         case AST_IMPLICA:    //alterações 02/12
             printf("((!");            
             gerar_codigo(ptr->filho1);
@@ -367,11 +387,25 @@ void gerar_codigo(struct ASTNode* ptr) {
           
         /* Chamada de funcao */
         case AST_FCHAMADA:
-            printf("%s(", ptr->valor);
+            printf("%s", ptr->valor);
             gerar_codigo(ptr->filho1);
-            printf(")");
             break;
 
+        /* Literais */
+        case AST_INTEIRO:
+        case AST_STRING:
+        case AST_CHAR:
+        case AST_FLOAT:
+            printf("%s", ptr->valor);
+            break;
+
+        case AST_VERDADEIRO:
+            printf(" 1 ");
+            break;
+
+        case AST_FALSO:
+            printf(" 0 ");
+            break;
         /* Tipos */
         case AST_TIPO_BOOLEANO:
             printf("int ");

@@ -1,0 +1,5 @@
+programa {
+    enquanto (x < 10) {
+        x = x + 1;
+    }
+}

@@ -115,7 +115,7 @@ lista_argumentos
 
 programa
     : { $$ = NULL; } 
-    | programa comandos { $$ = NULL; }
+    | programa comandos { $$ = opr(';', $1, $2, NULL); }
     ;
 
 
