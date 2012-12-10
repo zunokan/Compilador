@@ -424,7 +424,7 @@ void gerar_codigo(struct ASTNode* ptr) {
             gerar_codigo(ptr->filho1);
             printf(") && (");
             gerar_codigo(ptr->filho2);
-            printf(")) || ((");
+            printf(")) || (");
             gerar_codigo(ptr->filho1);
             printf(") && (");
             gerar_codigo(ptr->filho2);
@@ -473,7 +473,7 @@ void gerar_codigo(struct ASTNode* ptr) {
 			printf("%c", '%');			
 			printf("s\", ");
 			gerar_codigo(ptr->filho1);
-			printf(");");
+			printf(")");
 			
         /* Literais */
         case AST_INTEIRO:

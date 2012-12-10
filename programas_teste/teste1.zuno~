@@ -32,13 +32,3 @@ programa {
 } 
 
 
-se (n > 1) {
-            teste = verdadeiro -> verdadeiro <-> (verdadeiro && (falso || verdadeiro));
-        }
-        senao {
-            para cada z em conj {
-                z = z + 1;
-            }
-
-            teste = falso;
-        }

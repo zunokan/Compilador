@@ -18,7 +18,7 @@ enum CTipo {
     AST_DECL_MAIN,
     AST_RETORNE,
 
-    /* identificadores e literais */
+    /* identificadores, literais e decaracao de variáveis*/
     AST_ID,
 	AST_TIPO1,
 	AST_TIPO2,
@@ -56,7 +56,7 @@ enum CTipo {
     AST_BIIMPLICA,
     AST_DISJUNCAO,
     AST_CONJUNCAO,
-	AST_CAST, /* Verificar isso depois*/
+	AST_CAST, 
     AST_UNARIA1,
 	AST_UNARIA2,
 	AST_UNARIA3,
@@ -415,7 +415,7 @@ void gerar_codigo(struct ASTNode* ptr) {
 
         /* Operadores logicos */
         /* -> = (!a && !b) || (!a && b) || (a && b) */
-        case AST_IMPLICA:    //alterações 02/12
+        case AST_IMPLICA:    
             printf("(!(");            
             gerar_codigo(ptr->filho1);
             printf(") && !(");
@@ -424,14 +424,14 @@ void gerar_codigo(struct ASTNode* ptr) {
             gerar_codigo(ptr->filho1);
             printf(") && (");
             gerar_codigo(ptr->filho2);
-            printf(")) || (");
+            printf(")) || ((");
             gerar_codigo(ptr->filho1);
             printf(") && (");
             gerar_codigo(ptr->filho2);
             printf("))");            
             break;
 
-        case AST_BIIMPLICA:    //alterações 02/12
+        case AST_BIIMPLICA:   
             printf("((!");            
             gerar_codigo(ptr->filho1);
             printf(" && !");
@@ -443,13 +443,13 @@ void gerar_codigo(struct ASTNode* ptr) {
             printf("))");            
             break;
 
-        case AST_DISJUNCAO:    //alterações 02/12
+        case AST_DISJUNCAO:    
             gerar_codigo(ptr->filho1);
             printf("||");
             gerar_codigo(ptr->filho2);            
             break;
 
-        case AST_CONJUNCAO:    //alterações 02/12
+        case AST_CONJUNCAO:   
             gerar_codigo(ptr->filho1);
             printf("&&");
             gerar_codigo(ptr->filho2);            
@@ -467,11 +467,13 @@ void gerar_codigo(struct ASTNode* ptr) {
             gerar_codigo(ptr->filho1);
             break;
 		/* Leitura e Escrita */
+
 		case AST_ESCREVA:
 			printf("printf(\"");
 			printf("%c", '%');			
 			printf("s\", ");
 			gerar_codigo(ptr->filho1);
+			printf(");");
 			
         /* Literais */
         case AST_INTEIRO:

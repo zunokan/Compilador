@@ -1,0 +1,20 @@
+programa { 
+    inteiro teste = 1;
+    inteiro flag = 0;
+
+   faca {
+     	teste = teste * (4/2);
+		escreva (teste);
+		flag = flag +1;   
+    } enquanto( flag <= 1);
+
+	//preenche
+	inteiro i = 1;
+	inteiro vetor[10] = {10,9,8,7,6,5,4,3,2,1};
+	inteiro tam = 10;
+	enquanto (i < tam){
+		escreva(vetor[i]);
+		i = i + 1;
+	}
+
+} 

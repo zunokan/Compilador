@@ -1,6 +1,8 @@
 programa {
 	inteiro x = 500;
 	inteiro vetor[10];
+	inteiro y = 0;
+	inteiro baz = 1;
 	string zuno = "Compiladores";    
 	se (x > 3) {
         x = x * 2;
@@ -13,10 +15,10 @@ programa {
 	
     enquanto (x < 10 && x != 5) {
         x = x + 1;
-        y = x + var;
+        y = x + y;
         enquanto (x < 10 && x != 5) {
             x = x + 1;
-            y = x + var;
+            y = x + y;
             baz = (verdadeiro && falso) -> verdadeiro;
         }
     }

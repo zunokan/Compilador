@@ -1,34 +1,21 @@
-inteiro soma_3 ( inteiro x, inteiro y, inteiro z){
-        inteiro aux = x + y + z;
-        retorne aux;
-}
-
-procedimento imprime (caractere y){
-        caractere texto =  y;
-		escreva(y);
-}
-
-inteiro faixa (flutuante b){
-	se ((b > 0) && (b < 5)){
-		retorne 1;	
-	} senao se ((b > 5.5) && (b <= 10)){
-		retorne 2;
-	} senao se ((b> 10.5) || (b < 10.9)){
-		retorne 3;
-	} senao {
-		retorne 10;	
-	}
-}
 
 programa { 
     inteiro flag = 0;		
 	flutuante x = 1;
-	string vetor[5] = {"aaaa","aaaa","aaaa","aaaa","aaaa";};
-    inteiro teste = faixa(x);
-	caractere c = 'Z';
-	imprime(c);
+	inteiro teste = 12;
+	string faixa = "10";
+	se ((x > 0) && (x < 5)){
+		escreva("1");	
+	} senao se ((x > 5.5) && (x <= 10)){
+		escreva("2");
+	} senao se ((x> 10.5) || (x < 10.9)){
+		escreva("3");
+	} senao {
+		escreva("4");
+	}
+    
     enquanto (flag < 10) {
-		escreva(x);
+		escreva("Coxinha");
 		faixa = faixa + ((2*2) - 1);
         flag = flag + 1;
     }
